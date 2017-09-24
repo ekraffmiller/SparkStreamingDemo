@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="1" failures="0" name="edu.harvard.iq.sparkstreamingml.TwitterStreamingSentimentTest" time="9.953" errors="1" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib"/>
+    <property name="java.vm.version" value="25.60-b23"/>
+    <property name="gopherProxySet" value="false"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="maven.multiModuleProjectDirectory" value="/Users/ellenk/src/SparkStreamingML"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="test" value="edu.harvard.iq.sparkstreamingml.TwitterStreamingSentimentTest#testMain"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/Users/ellenk/src/SparkStreamingML"/>
+    <property name="java.runtime.version" value="1.8.0_60-b27"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.CGraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/endorsed"/>
+    <property name="os.arch" value="x86_64"/>
+    <property name="java.io.tmpdir" value="/var/folders/_1/mcb2ytt96v99k43376lfg3j00000gr/T/"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="maven.ext.class.path" value="/Applications/NetBeans/NetBeans 8.2.app/Contents/Resources/NetBeans/java/maven-nblib/netbeans-eventspy.jar"/>
+    <property name="classworlds.conf" value="/Applications/apache-maven-3.3.9/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/ellenk/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="52.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="skipTests" value="false"/>
+    <property name="os.version" value="10.12.6"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="user.home" value="/Users/ellenk"/>
+    <property name="user.timezone" value="America/New_York"/>
+    <property name="java.awt.printerjob" value="sun.lwawt.macosx.CPrinterJob"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="user.name" value="ellenk"/>
+    <property name="java.class.path" value="/Applications/apache-maven-3.3.9/boot/plexus-classworlds-2.5.2.jar"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dtest=edu.harvard.iq.sparkstreamingml.TwitterStreamingSentimentTest#testMain -Dmaven.ext.class.path=/Applications/NetBeans/NetBeans 8.2.app/Contents/Resources/NetBeans/java/maven-nblib/netbeans-eventspy.jar -DskipTests=false surefire:test"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="en"/>
+    <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.8.0_60"/>
+    <property name="java.ext.dirs" value="/Users/ellenk/Library/Java/Extensions:/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/ext:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java"/>
+    <property name="sun.boot.class.path" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/jre/classes"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="/Applications/apache-maven-3.3.9"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase classname="edu.harvard.iq.sparkstreamingml.TwitterStreamingSentimentTest" name="testMain" time="9.953">
+    <error message="Job aborted due to stage failure: Task 0 in stage 4.0 failed 1 times, most recent failure: Lost task 0.0 in stage 4.0 (TID 4, localhost, executor driver): org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+Driver stacktrace:" type="org.apache.spark.SparkException">org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 4.0 failed 1 times, most recent failure: Lost task 0.0 in stage 4.0 (TID 4, localhost, executor driver): org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+Driver stacktrace:
+	at org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1435)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1423)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1422)
+	at scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)
+	at scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:48)
+	at org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1422)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:802)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:802)
+	at scala.Option.foreach(Option.scala:257)
+	at org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:802)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1650)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1605)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1594)
+	at org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)
+	at org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:628)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:1918)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:1931)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:1958)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1.apply(RDD.scala:923)
+	at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)
+	at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:112)
+	at org.apache.spark.rdd.RDD.withScope(RDD.scala:362)
+	at org.apache.spark.rdd.RDD.foreachPartition(RDD.scala:923)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$1.apply$mcV$sp(Dataset.scala:2305)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$1.apply(Dataset.scala:2305)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$1.apply(Dataset.scala:2305)
+	at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:57)
+	at org.apache.spark.sql.Dataset.withNewExecutionId(Dataset.scala:2765)
+	at org.apache.spark.sql.Dataset.foreachPartition(Dataset.scala:2304)
+	at org.apache.spark.sql.Dataset.foreachPartition(Dataset.scala:2316)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$analyzeTweets$b1dee145$1(TwitterStreamingSentiment.java:67)
+	at org.apache.spark.streaming.api.java.JavaDStreamLike$$anonfun$foreachRDD$1.apply(JavaDStreamLike.scala:272)
+	at org.apache.spark.streaming.api.java.JavaDStreamLike$$anonfun$foreachRDD$1.apply(JavaDStreamLike.scala:272)
+	at org.apache.spark.streaming.dstream.DStream$$anonfun$foreachRDD$1$$anonfun$apply$mcV$sp$3.apply(DStream.scala:627)
+	at org.apache.spark.streaming.dstream.DStream$$anonfun$foreachRDD$1$$anonfun$apply$mcV$sp$3.apply(DStream.scala:627)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1$$anonfun$apply$mcV$sp$1.apply$mcV$sp(ForEachDStream.scala:51)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1$$anonfun$apply$mcV$sp$1.apply(ForEachDStream.scala:51)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1$$anonfun$apply$mcV$sp$1.apply(ForEachDStream.scala:51)
+	at org.apache.spark.streaming.dstream.DStream.createRDDWithLocalProperties(DStream.scala:415)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1.apply$mcV$sp(ForEachDStream.scala:50)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1.apply(ForEachDStream.scala:50)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1.apply(ForEachDStream.scala:50)
+	at scala.util.Try$.apply(Try.scala:192)
+	at org.apache.spark.streaming.scheduler.Job.run(Job.scala:39)
+	at org.apache.spark.streaming.scheduler.JobScheduler$JobHandler$$anonfun$run$1.apply$mcV$sp(JobScheduler.scala:254)
+	at org.apache.spark.streaming.scheduler.JobScheduler$JobHandler$$anonfun$run$1.apply(JobScheduler.scala:254)
+	at org.apache.spark.streaming.scheduler.JobScheduler$JobHandler$$anonfun$run$1.apply(JobScheduler.scala:254)
+	at scala.util.DynamicVariable.withValue(DynamicVariable.scala:58)
+	at org.apache.spark.streaming.scheduler.JobScheduler$JobHandler.run(JobScheduler.scala:253)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	... 3 more
+</error>
+    <system-err>Using Spark&apos;s default log4j profile: org/apache/spark/log4j-defaults.properties
+17/09/23 10:32:41 INFO SparkContext: Running Spark version 2.1.0
+17/09/23 10:32:41 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+17/09/23 10:32:41 INFO SecurityManager: Changing view acls to: ellenk
+17/09/23 10:32:41 INFO SecurityManager: Changing modify acls to: ellenk
+17/09/23 10:32:41 INFO SecurityManager: Changing view acls groups to: 
+17/09/23 10:32:41 INFO SecurityManager: Changing modify acls groups to: 
+17/09/23 10:32:41 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(ellenk); groups with view permissions: Set(); users  with modify permissions: Set(ellenk); groups with modify permissions: Set()
+17/09/23 10:32:41 INFO Utils: Successfully started service &apos;sparkDriver&apos; on port 64313.
+17/09/23 10:32:41 INFO SparkEnv: Registering MapOutputTracker
+17/09/23 10:32:41 INFO SparkEnv: Registering BlockManagerMaster
+17/09/23 10:32:41 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+17/09/23 10:32:41 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+17/09/23 10:32:41 INFO DiskBlockManager: Created local directory at /private/var/folders/_1/mcb2ytt96v99k43376lfg3j00000gr/T/blockmgr-3b5a313e-e9cc-4264-87a1-7f92be980052
+17/09/23 10:32:42 INFO MemoryStore: MemoryStore started with capacity 2004.6 MB
+17/09/23 10:32:42 INFO SparkEnv: Registering OutputCommitCoordinator
+17/09/23 10:32:42 INFO Utils: Successfully started service &apos;SparkUI&apos; on port 4040.
+17/09/23 10:32:42 INFO SparkUI: Bound SparkUI to 0.0.0.0, and started at http://192.168.1.3:4040
+17/09/23 10:32:42 INFO Executor: Starting executor ID driver on host localhost
+17/09/23 10:32:42 INFO Utils: Successfully started service &apos;org.apache.spark.network.netty.NettyBlockTransferService&apos; on port 64314.
+17/09/23 10:32:42 INFO NettyBlockTransferService: Server created on 192.168.1.3:64314
+17/09/23 10:32:42 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+17/09/23 10:32:42 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 192.168.1.3, 64314, None)
+17/09/23 10:32:42 INFO BlockManagerMasterEndpoint: Registering block manager 192.168.1.3:64314 with 2004.6 MB RAM, BlockManagerId(driver, 192.168.1.3, 64314, None)
+17/09/23 10:32:42 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 192.168.1.3, 64314, None)
+17/09/23 10:32:42 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 192.168.1.3, 64314, None)
+17/09/23 10:32:42 WARN SparkContext: Using an existing SparkContext; some configuration may not take effect.
+17/09/23 10:32:42 INFO SharedState: Warehouse path is &apos;file:/Users/ellenk/src/SparkStreamingML/spark-warehouse/&apos;.
+17/09/23 10:32:42 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 127.1 KB, free 2004.5 MB)
+17/09/23 10:32:42 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 14.3 KB, free 2004.5 MB)
+17/09/23 10:32:42 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on 192.168.1.3:64314 (size: 14.3 KB, free: 2004.6 MB)
+17/09/23 10:32:42 INFO SparkContext: Created broadcast 0 from textFile at ReadWrite.scala:379
+17/09/23 10:32:43 INFO FileInputFormat: Total input paths to process : 1
+17/09/23 10:32:43 INFO SparkContext: Starting job: first at ReadWrite.scala:379
+17/09/23 10:32:43 INFO DAGScheduler: Got job 0 (first at ReadWrite.scala:379) with 1 output partitions
+17/09/23 10:32:43 INFO DAGScheduler: Final stage: ResultStage 0 (first at ReadWrite.scala:379)
+17/09/23 10:32:43 INFO DAGScheduler: Parents of final stage: List()
+17/09/23 10:32:43 INFO DAGScheduler: Missing parents: List()
+17/09/23 10:32:43 INFO DAGScheduler: Submitting ResultStage 0 (/Users/ellenk/src/SparkStreamingML/data/naiveBayes/metadata MapPartitionsRDD[1] at textFile at ReadWrite.scala:379), which has no missing parents
+17/09/23 10:32:43 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 3.3 KB, free 2004.5 MB)
+17/09/23 10:32:43 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 1995.0 B, free 2004.5 MB)
+17/09/23 10:32:43 INFO BlockManagerInfo: Added broadcast_1_piece0 in memory on 192.168.1.3:64314 (size: 1995.0 B, free: 2004.6 MB)
+17/09/23 10:32:43 INFO SparkContext: Created broadcast 1 from broadcast at DAGScheduler.scala:996
+17/09/23 10:32:43 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 0 (/Users/ellenk/src/SparkStreamingML/data/naiveBayes/metadata MapPartitionsRDD[1] at textFile at ReadWrite.scala:379)
+17/09/23 10:32:43 INFO TaskSchedulerImpl: Adding task set 0.0 with 1 tasks
+17/09/23 10:32:43 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0, localhost, executor driver, partition 0, PROCESS_LOCAL, 6021 bytes)
+17/09/23 10:32:43 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+17/09/23 10:32:43 INFO HadoopRDD: Input split: file:/Users/ellenk/src/SparkStreamingML/data/naiveBayes/metadata/part-00000:0+330
+17/09/23 10:32:43 INFO deprecation: mapred.tip.id is deprecated. Instead, use mapreduce.task.id
+17/09/23 10:32:43 INFO deprecation: mapred.task.id is deprecated. Instead, use mapreduce.task.attempt.id
+17/09/23 10:32:43 INFO deprecation: mapred.task.is.map is deprecated. Instead, use mapreduce.task.ismap
+17/09/23 10:32:43 INFO deprecation: mapred.task.partition is deprecated. Instead, use mapreduce.task.partition
+17/09/23 10:32:43 INFO deprecation: mapred.job.id is deprecated. Instead, use mapreduce.job.id
+17/09/23 10:32:43 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 1420 bytes result sent to driver
+17/09/23 10:32:43 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 84 ms on localhost (executor driver) (1/1)
+17/09/23 10:32:43 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool 
+17/09/23 10:32:43 INFO DAGScheduler: ResultStage 0 (first at ReadWrite.scala:379) finished in 0.096 s
+17/09/23 10:32:43 INFO DAGScheduler: Job 0 finished: first at ReadWrite.scala:379, took 0.169463 s
+17/09/23 10:32:43 INFO SparkContext: Starting job: parquet at NaiveBayes.scala:398
+17/09/23 10:32:43 INFO DAGScheduler: Got job 1 (parquet at NaiveBayes.scala:398) with 1 output partitions
+17/09/23 10:32:43 INFO DAGScheduler: Final stage: ResultStage 1 (parquet at NaiveBayes.scala:398)
+17/09/23 10:32:43 INFO DAGScheduler: Parents of final stage: List()
+17/09/23 10:32:43 INFO DAGScheduler: Missing parents: List()
+17/09/23 10:32:43 INFO DAGScheduler: Submitting ResultStage 1 (MapPartitionsRDD[3] at parquet at NaiveBayes.scala:398), which has no missing parents
+17/09/23 10:32:43 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 45.5 KB, free 2004.4 MB)
+17/09/23 10:32:43 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 15.9 KB, free 2004.4 MB)
+17/09/23 10:32:43 INFO BlockManagerInfo: Added broadcast_2_piece0 in memory on 192.168.1.3:64314 (size: 15.9 KB, free: 2004.6 MB)
+17/09/23 10:32:43 INFO SparkContext: Created broadcast 2 from broadcast at DAGScheduler.scala:996
+17/09/23 10:32:43 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 1 (MapPartitionsRDD[3] at parquet at NaiveBayes.scala:398)
+17/09/23 10:32:43 INFO TaskSchedulerImpl: Adding task set 1.0 with 1 tasks
+17/09/23 10:32:43 INFO TaskSetManager: Starting task 0.0 in stage 1.0 (TID 1, localhost, executor driver, partition 0, PROCESS_LOCAL, 6178 bytes)
+17/09/23 10:32:43 INFO Executor: Running task 0.0 in stage 1.0 (TID 1)
+17/09/23 10:32:43 INFO ParquetFileReader: Initiating action with parallelism: 5
+SLF4J: Failed to load class &quot;org.slf4j.impl.StaticLoggerBinder&quot;.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+17/09/23 10:32:43 INFO Executor: Finished task 0.0 in stage 1.0 (TID 1). 1903 bytes result sent to driver
+17/09/23 10:32:43 INFO TaskSetManager: Finished task 0.0 in stage 1.0 (TID 1) in 185 ms on localhost (executor driver) (1/1)
+17/09/23 10:32:43 INFO TaskSchedulerImpl: Removed TaskSet 1.0, whose tasks have all completed, from pool 
+17/09/23 10:32:43 INFO DAGScheduler: ResultStage 1 (parquet at NaiveBayes.scala:398) finished in 0.186 s
+17/09/23 10:32:43 INFO DAGScheduler: Job 1 finished: parquet at NaiveBayes.scala:398, took 0.204837 s
+17/09/23 10:32:43 INFO BlockManagerInfo: Removed broadcast_1_piece0 on 192.168.1.3:64314 in memory (size: 1995.0 B, free: 2004.6 MB)
+17/09/23 10:32:43 INFO BlockManagerInfo: Removed broadcast_2_piece0 on 192.168.1.3:64314 in memory (size: 15.9 KB, free: 2004.6 MB)
+17/09/23 10:32:44 INFO FileSourceStrategy: Pruning directories with: 
+17/09/23 10:32:44 INFO FileSourceStrategy: Post-Scan Filters: 
+17/09/23 10:32:44 INFO FileSourceStrategy: Output Data Schema: struct&lt;pi: vector, theta: matrix&gt;
+17/09/23 10:32:44 INFO FileSourceStrategy: Pushed Filters: 
+17/09/23 10:32:45 INFO BlockManagerInfo: Removed broadcast_0_piece0 on 192.168.1.3:64314 in memory (size: 14.3 KB, free: 2004.6 MB)
+17/09/23 10:32:45 INFO CodeGenerator: Code generated in 219.257507 ms
+17/09/23 10:32:45 INFO MemoryStore: Block broadcast_3 stored as values in memory (estimated size 153.7 KB, free 2004.4 MB)
+17/09/23 10:32:45 INFO MemoryStore: Block broadcast_3_piece0 stored as bytes in memory (estimated size 15.6 KB, free 2004.4 MB)
+17/09/23 10:32:45 INFO BlockManagerInfo: Added broadcast_3_piece0 in memory on 192.168.1.3:64314 (size: 15.6 KB, free: 2004.6 MB)
+17/09/23 10:32:45 INFO SparkContext: Created broadcast 3 from head at NaiveBayes.scala:402
+17/09/23 10:32:45 INFO FileSourceScanExec: Planning scan with bin packing, max size: 4194304 bytes, open cost is considered as scanning 4194304 bytes.
+17/09/23 10:32:45 INFO SparkContext: Starting job: head at NaiveBayes.scala:402
+17/09/23 10:32:45 INFO DAGScheduler: Got job 2 (head at NaiveBayes.scala:402) with 1 output partitions
+17/09/23 10:32:45 INFO DAGScheduler: Final stage: ResultStage 2 (head at NaiveBayes.scala:402)
+17/09/23 10:32:45 INFO DAGScheduler: Parents of final stage: List()
+17/09/23 10:32:45 INFO DAGScheduler: Missing parents: List()
+17/09/23 10:32:45 INFO DAGScheduler: Submitting ResultStage 2 (MapPartitionsRDD[6] at head at NaiveBayes.scala:402), which has no missing parents
+17/09/23 10:32:45 INFO MemoryStore: Block broadcast_4 stored as values in memory (estimated size 16.4 KB, free 2004.4 MB)
+17/09/23 10:32:45 INFO MemoryStore: Block broadcast_4_piece0 stored as bytes in memory (estimated size 6.0 KB, free 2004.4 MB)
+17/09/23 10:32:45 INFO BlockManagerInfo: Added broadcast_4_piece0 in memory on 192.168.1.3:64314 (size: 6.0 KB, free: 2004.6 MB)
+17/09/23 10:32:45 INFO SparkContext: Created broadcast 4 from broadcast at DAGScheduler.scala:996
+17/09/23 10:32:45 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 2 (MapPartitionsRDD[6] at head at NaiveBayes.scala:402)
+17/09/23 10:32:45 INFO TaskSchedulerImpl: Adding task set 2.0 with 1 tasks
+17/09/23 10:32:45 INFO TaskSetManager: Starting task 0.0 in stage 2.0 (TID 2, localhost, executor driver, partition 0, PROCESS_LOCAL, 6522 bytes)
+17/09/23 10:32:45 INFO Executor: Running task 0.0 in stage 2.0 (TID 2)
+17/09/23 10:32:45 INFO FileScanRDD: Reading File path: file:///Users/ellenk/src/SparkStreamingML/data/naiveBayes/data/part-00000-f5335e2c-7e5f-4277-801e-2f2374993f40.snappy.parquet, range: 0-34191, partition values: [empty row]
+17/09/23 10:32:45 WARN ParquetRecordReader: Can not initialize counter due to context is not a instance of TaskInputOutputContext, but is org.apache.hadoop.mapreduce.task.TaskAttemptContextImpl
+17/09/23 10:32:45 INFO ParquetReadSupport: Going to read the following fields from the Parquet file:
+
+Parquet form:
+message spark_schema {
+  optional group pi {
+    required int32 type (INT_8);
+    optional int32 size;
+    optional group indices (LIST) {
+      repeated group list {
+        required int32 element;
+      }
+    }
+    optional group values (LIST) {
+      repeated group list {
+        required double element;
+      }
+    }
+  }
+  optional group theta {
+    required int32 type (INT_8);
+    required int32 numRows;
+    required int32 numCols;
+    optional group colPtrs (LIST) {
+      repeated group list {
+        required int32 element;
+      }
+    }
+    optional group rowIndices (LIST) {
+      repeated group list {
+        required int32 element;
+      }
+    }
+    optional group values (LIST) {
+      repeated group list {
+        required double element;
+      }
+    }
+    required boolean isTransposed;
+  }
+}
+
+Catalyst form:
+StructType(StructField(pi,org.apache.spark.ml.linalg.VectorUDT@3bfc3ba7,true), StructField(theta,org.apache.spark.ml.linalg.MatrixUDT@e59e0c69,true))
+       
+17/09/23 10:32:45 INFO CodeGenerator: Code generated in 32.681957 ms
+17/09/23 10:32:45 INFO CodeGenerator: Code generated in 16.208732 ms
+17/09/23 10:32:45 INFO CodeGenerator: Code generated in 17.374768 ms
+17/09/23 10:32:45 INFO InternalParquetRecordReader: RecordReader initialized will read a total of 1 records.
+17/09/23 10:32:45 INFO InternalParquetRecordReader: at row 0. reading next block
+17/09/23 10:32:45 INFO CodecPool: Got brand-new decompressor [.snappy]
+17/09/23 10:32:45 INFO InternalParquetRecordReader: block read in memory in 37 ms. row count = 1
+17/09/23 10:32:45 INFO Executor: Finished task 0.0 in stage 2.0 (TID 2). 29359 bytes result sent to driver
+17/09/23 10:32:45 INFO TaskSetManager: Finished task 0.0 in stage 2.0 (TID 2) in 295 ms on localhost (executor driver) (1/1)
+17/09/23 10:32:45 INFO TaskSchedulerImpl: Removed TaskSet 2.0, whose tasks have all completed, from pool 
+17/09/23 10:32:45 INFO DAGScheduler: ResultStage 2 (head at NaiveBayes.scala:402) finished in 0.296 s
+17/09/23 10:32:45 INFO DAGScheduler: Job 2 finished: head at NaiveBayes.scala:402, took 0.312499 s
+17/09/23 10:32:45 INFO CodeGenerator: Code generated in 11.977374 ms
+17/09/23 10:32:45 INFO ReceiverTracker: Starting 1 receivers
+17/09/23 10:32:45 INFO ReceiverTracker: ReceiverTracker started
+17/09/23 10:32:45 INFO TwitterInputDStream: Slide time = 5000 ms
+17/09/23 10:32:45 INFO TwitterInputDStream: Storage level = Serialized 1x Replicated
+17/09/23 10:32:45 INFO TwitterInputDStream: Checkpoint interval = null
+17/09/23 10:32:45 INFO TwitterInputDStream: Remember interval = 5000 ms
+17/09/23 10:32:45 INFO TwitterInputDStream: Initialized and validated org.apache.spark.streaming.twitter.TwitterInputDStream@56cb689
+17/09/23 10:32:45 INFO FilteredDStream: Slide time = 5000 ms
+17/09/23 10:32:45 INFO FilteredDStream: Storage level = Serialized 1x Replicated
+17/09/23 10:32:45 INFO FilteredDStream: Checkpoint interval = null
+17/09/23 10:32:45 INFO FilteredDStream: Remember interval = 5000 ms
+17/09/23 10:32:45 INFO FilteredDStream: Initialized and validated org.apache.spark.streaming.dstream.FilteredDStream@406118c6
+17/09/23 10:32:45 INFO MappedDStream: Slide time = 5000 ms
+17/09/23 10:32:45 INFO MappedDStream: Storage level = Serialized 1x Replicated
+17/09/23 10:32:45 INFO MappedDStream: Checkpoint interval = null
+17/09/23 10:32:45 INFO MappedDStream: Remember interval = 5000 ms
+17/09/23 10:32:45 INFO MappedDStream: Initialized and validated org.apache.spark.streaming.dstream.MappedDStream@388dd2cc
+17/09/23 10:32:45 INFO ForEachDStream: Slide time = 5000 ms
+17/09/23 10:32:45 INFO ForEachDStream: Storage level = Serialized 1x Replicated
+17/09/23 10:32:45 INFO ForEachDStream: Checkpoint interval = null
+17/09/23 10:32:45 INFO ForEachDStream: Remember interval = 5000 ms
+17/09/23 10:32:45 INFO ForEachDStream: Initialized and validated org.apache.spark.streaming.dstream.ForEachDStream@7c5bd415
+17/09/23 10:32:45 INFO DAGScheduler: Got job 3 (start at TwitterStreamingSentiment.java:79) with 1 output partitions
+17/09/23 10:32:45 INFO DAGScheduler: Final stage: ResultStage 3 (start at TwitterStreamingSentiment.java:79)
+17/09/23 10:32:45 INFO DAGScheduler: Parents of final stage: List()
+17/09/23 10:32:45 INFO DAGScheduler: Missing parents: List()
+17/09/23 10:32:45 INFO DAGScheduler: Submitting ResultStage 3 (Receiver 0 ParallelCollectionRDD[7] at makeRDD at ReceiverTracker.scala:620), which has no missing parents
+17/09/23 10:32:45 INFO ReceiverTracker: Receiver 0 started
+17/09/23 10:32:45 INFO MemoryStore: Block broadcast_5 stored as values in memory (estimated size 44.4 KB, free 2004.4 MB)
+17/09/23 10:32:45 INFO MemoryStore: Block broadcast_5_piece0 stored as bytes in memory (estimated size 15.4 KB, free 2004.4 MB)
+17/09/23 10:32:45 INFO BlockManagerInfo: Added broadcast_5_piece0 in memory on 192.168.1.3:64314 (size: 15.4 KB, free: 2004.6 MB)
+17/09/23 10:32:45 INFO SparkContext: Created broadcast 5 from broadcast at DAGScheduler.scala:996
+17/09/23 10:32:45 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 3 (Receiver 0 ParallelCollectionRDD[7] at makeRDD at ReceiverTracker.scala:620)
+17/09/23 10:32:45 INFO TaskSchedulerImpl: Adding task set 3.0 with 1 tasks
+17/09/23 10:32:45 INFO TaskSetManager: Starting task 0.0 in stage 3.0 (TID 3, localhost, executor driver, partition 0, PROCESS_LOCAL, 10560 bytes)
+17/09/23 10:32:45 INFO Executor: Running task 0.0 in stage 3.0 (TID 3)
+17/09/23 10:32:45 INFO RecurringTimer: Started timer for JobGenerator at time 1506177170000
+17/09/23 10:32:45 INFO JobGenerator: Started JobGenerator at 1506177170000 ms
+17/09/23 10:32:45 INFO JobScheduler: Started JobScheduler
+17/09/23 10:32:45 INFO StreamingContext: StreamingContext started
+17/09/23 10:32:45 INFO RecurringTimer: Started timer for BlockGenerator at time 1506177166000
+17/09/23 10:32:45 INFO BlockGenerator: Started BlockGenerator
+17/09/23 10:32:45 INFO BlockGenerator: Started block pushing thread
+17/09/23 10:32:45 INFO ReceiverTracker: Registered receiver for stream 0 from 192.168.1.3:64313
+17/09/23 10:32:45 INFO ReceiverSupervisorImpl: Starting receiver 0
+17/09/23 10:32:46 INFO TwitterReceiver: Twitter receiver started
+17/09/23 10:32:46 INFO TwitterStreamImpl: Establishing connection.
+17/09/23 10:32:46 INFO ReceiverSupervisorImpl: Called receiver 0 onStart
+17/09/23 10:32:46 INFO ReceiverSupervisorImpl: Waiting for receiver to be stopped
+17/09/23 10:32:46 INFO TwitterStreamImpl: Connection established.
+17/09/23 10:32:46 INFO TwitterStreamImpl: Receiving status stream.
+17/09/23 10:32:47 INFO BlockManagerInfo: Removed broadcast_4_piece0 on 192.168.1.3:64314 in memory (size: 6.0 KB, free: 2004.6 MB)
+17/09/23 10:32:47 INFO MemoryStore: Block input-0-1506177167000 stored as bytes in memory (estimated size 50.3 KB, free 2004.3 MB)
+17/09/23 10:32:47 INFO BlockManagerInfo: Added input-0-1506177167000 in memory on 192.168.1.3:64314 (size: 50.3 KB, free: 2004.5 MB)
+17/09/23 10:32:47 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:47 WARN BlockManager: Block input-0-1506177167000 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:47 INFO BlockGenerator: Pushed block input-0-1506177167000
+17/09/23 10:32:47 INFO MemoryStore: Block input-0-1506177167200 stored as bytes in memory (estimated size 62.4 KB, free 2004.3 MB)
+17/09/23 10:32:47 INFO BlockManagerInfo: Added input-0-1506177167200 in memory on 192.168.1.3:64314 (size: 62.4 KB, free: 2004.5 MB)
+17/09/23 10:32:47 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:47 WARN BlockManager: Block input-0-1506177167200 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:47 INFO BlockGenerator: Pushed block input-0-1506177167200
+17/09/23 10:32:47 INFO MemoryStore: Block input-0-1506177167600 stored as bytes in memory (estimated size 6.9 KB, free 2004.3 MB)
+17/09/23 10:32:47 INFO BlockManagerInfo: Added input-0-1506177167600 in memory on 192.168.1.3:64314 (size: 6.9 KB, free: 2004.5 MB)
+17/09/23 10:32:47 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:47 WARN BlockManager: Block input-0-1506177167600 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:47 INFO BlockGenerator: Pushed block input-0-1506177167600
+17/09/23 10:32:48 INFO MemoryStore: Block input-0-1506177168000 stored as bytes in memory (estimated size 85.1 KB, free 2004.2 MB)
+17/09/23 10:32:48 INFO BlockManagerInfo: Added input-0-1506177168000 in memory on 192.168.1.3:64314 (size: 85.1 KB, free: 2004.4 MB)
+17/09/23 10:32:48 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:48 WARN BlockManager: Block input-0-1506177168000 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:48 INFO BlockGenerator: Pushed block input-0-1506177168000
+17/09/23 10:32:48 INFO MemoryStore: Block input-0-1506177168200 stored as bytes in memory (estimated size 40.9 KB, free 2004.1 MB)
+17/09/23 10:32:48 INFO BlockManagerInfo: Added input-0-1506177168200 in memory on 192.168.1.3:64314 (size: 40.9 KB, free: 2004.3 MB)
+17/09/23 10:32:48 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:48 WARN BlockManager: Block input-0-1506177168200 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:48 INFO BlockGenerator: Pushed block input-0-1506177168200
+17/09/23 10:32:48 INFO MemoryStore: Block input-0-1506177168400 stored as bytes in memory (estimated size 10.4 KB, free 2004.1 MB)
+17/09/23 10:32:48 INFO BlockManagerInfo: Added input-0-1506177168400 in memory on 192.168.1.3:64314 (size: 10.4 KB, free: 2004.3 MB)
+17/09/23 10:32:48 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:48 WARN BlockManager: Block input-0-1506177168400 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:48 INFO BlockGenerator: Pushed block input-0-1506177168400
+17/09/23 10:32:49 INFO MemoryStore: Block input-0-1506177169000 stored as bytes in memory (estimated size 74.5 KB, free 2004.1 MB)
+17/09/23 10:32:49 INFO BlockManagerInfo: Added input-0-1506177169000 in memory on 192.168.1.3:64314 (size: 74.5 KB, free: 2004.2 MB)
+17/09/23 10:32:49 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:49 WARN BlockManager: Block input-0-1506177169000 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:49 INFO BlockGenerator: Pushed block input-0-1506177169000
+17/09/23 10:32:49 INFO MemoryStore: Block input-0-1506177169200 stored as bytes in memory (estimated size 31.8 KB, free 2004.0 MB)
+17/09/23 10:32:49 INFO BlockManagerInfo: Added input-0-1506177169200 in memory on 192.168.1.3:64314 (size: 31.8 KB, free: 2004.2 MB)
+17/09/23 10:32:49 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:49 WARN BlockManager: Block input-0-1506177169200 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:49 INFO BlockGenerator: Pushed block input-0-1506177169200
+17/09/23 10:32:49 INFO MemoryStore: Block input-0-1506177169400 stored as bytes in memory (estimated size 14.9 KB, free 2004.0 MB)
+17/09/23 10:32:49 INFO BlockManagerInfo: Added input-0-1506177169400 in memory on 192.168.1.3:64314 (size: 14.9 KB, free: 2004.2 MB)
+17/09/23 10:32:49 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:49 WARN BlockManager: Block input-0-1506177169400 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:49 INFO BlockGenerator: Pushed block input-0-1506177169400
+17/09/23 10:32:49 INFO MemoryStore: Block input-0-1506177169600 stored as bytes in memory (estimated size 4.6 KB, free 2004.0 MB)
+17/09/23 10:32:49 INFO BlockManagerInfo: Added input-0-1506177169600 in memory on 192.168.1.3:64314 (size: 4.6 KB, free: 2004.2 MB)
+17/09/23 10:32:49 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:49 WARN BlockManager: Block input-0-1506177169600 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:49 INFO BlockGenerator: Pushed block input-0-1506177169600
+17/09/23 10:32:50 INFO JobScheduler: Added jobs for time 1506177170000 ms
+17/09/23 10:32:50 INFO JobScheduler: Starting job streaming job 1506177170000 ms.0 from job set of time 1506177170000 ms
+17/09/23 10:32:50 INFO MemoryStore: Block input-0-1506177170000 stored as bytes in memory (estimated size 55.9 KB, free 2003.9 MB)
+17/09/23 10:32:50 INFO BlockManagerInfo: Added input-0-1506177170000 in memory on 192.168.1.3:64314 (size: 55.9 KB, free: 2004.1 MB)
+17/09/23 10:32:50 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:50 WARN BlockManager: Block input-0-1506177170000 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:50 INFO BlockGenerator: Pushed block input-0-1506177170000
+17/09/23 10:32:50 INFO MemoryStore: Block input-0-1506177170200 stored as bytes in memory (estimated size 78.3 KB, free 2003.9 MB)
+17/09/23 10:32:50 INFO BlockManagerInfo: Added input-0-1506177170200 in memory on 192.168.1.3:64314 (size: 78.3 KB, free: 2004.1 MB)
+17/09/23 10:32:50 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:50 WARN BlockManager: Block input-0-1506177170200 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:50 INFO BlockGenerator: Pushed block input-0-1506177170200
+17/09/23 10:32:50 INFO MemoryStore: Block input-0-1506177170400 stored as bytes in memory (estimated size 4.5 KB, free 2003.9 MB)
+17/09/23 10:32:50 INFO BlockManagerInfo: Added input-0-1506177170400 in memory on 192.168.1.3:64314 (size: 4.5 KB, free: 2004.1 MB)
+17/09/23 10:32:50 WARN RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.
+17/09/23 10:32:50 WARN BlockManager: Block input-0-1506177170400 replicated to only 0 peer(s) instead of 1 peers
+17/09/23 10:32:50 INFO BlockGenerator: Pushed block input-0-1506177170400
+17/09/23 10:32:50 INFO CodeGenerator: Code generated in 84.272877 ms
+17/09/23 10:32:50 INFO SparkContext: Starting job: foreachPartition at TwitterStreamingSentiment.java:67
+17/09/23 10:32:50 INFO DAGScheduler: Got job 4 (foreachPartition at TwitterStreamingSentiment.java:67) with 10 output partitions
+17/09/23 10:32:50 INFO DAGScheduler: Final stage: ResultStage 4 (foreachPartition at TwitterStreamingSentiment.java:67)
+17/09/23 10:32:50 INFO DAGScheduler: Parents of final stage: List()
+17/09/23 10:32:50 INFO DAGScheduler: Missing parents: List()
+17/09/23 10:32:50 INFO DAGScheduler: Submitting ResultStage 4 (MapPartitionsRDD[16] at foreachPartition at TwitterStreamingSentiment.java:67), which has no missing parents
+17/09/23 10:32:50 INFO MemoryStore: Block broadcast_6 stored as values in memory (estimated size 97.1 KB, free 2003.8 MB)
+17/09/23 10:32:50 INFO MemoryStore: Block broadcast_6_piece0 stored as bytes in memory (estimated size 48.3 KB, free 2003.7 MB)
+17/09/23 10:32:50 INFO BlockManagerInfo: Added broadcast_6_piece0 in memory on 192.168.1.3:64314 (size: 48.3 KB, free: 2004.0 MB)
+17/09/23 10:32:50 INFO SparkContext: Created broadcast 6 from broadcast at DAGScheduler.scala:996
+17/09/23 10:32:50 INFO DAGScheduler: Submitting 10 missing tasks from ResultStage 4 (MapPartitionsRDD[16] at foreachPartition at TwitterStreamingSentiment.java:67)
+17/09/23 10:32:50 INFO TaskSchedulerImpl: Adding task set 4.0 with 10 tasks
+17/09/23 10:32:50 INFO TaskSetManager: Starting task 0.0 in stage 4.0 (TID 4, localhost, executor driver, partition 0, ANY, 6300 bytes)
+17/09/23 10:32:50 INFO Executor: Running task 0.0 in stage 4.0 (TID 4)
+17/09/23 10:32:50 INFO BlockManager: Found block input-0-1506177167000 locally
+17/09/23 10:32:50 INFO CodeGenerator: Code generated in 7.856774 ms
+17/09/23 10:32:50 INFO CodeGenerator: Code generated in 24.701857 ms
+17/09/23 10:32:50 ERROR Executor: Exception in task 0.0 in stage 4.0 (TID 4)
+org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+17/09/23 10:32:50 INFO TaskSetManager: Starting task 1.0 in stage 4.0 (TID 5, localhost, executor driver, partition 1, ANY, 6300 bytes)
+17/09/23 10:32:50 INFO Executor: Running task 1.0 in stage 4.0 (TID 5)
+17/09/23 10:32:50 WARN TaskSetManager: Lost task 0.0 in stage 4.0 (TID 4, localhost, executor driver): org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+17/09/23 10:32:50 ERROR TaskSetManager: Task 0 in stage 4.0 failed 1 times; aborting job
+17/09/23 10:32:50 INFO BlockManager: Found block input-0-1506177167200 locally
+17/09/23 10:32:50 INFO TaskSchedulerImpl: Cancelling stage 4
+17/09/23 10:32:50 INFO Executor: Executor is trying to kill task 1.0 in stage 4.0 (TID 5)
+17/09/23 10:32:50 INFO TaskSchedulerImpl: Stage 4 was cancelled
+17/09/23 10:32:50 ERROR Executor: Exception in task 1.0 in stage 4.0 (TID 5)
+org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+17/09/23 10:32:50 INFO DAGScheduler: ResultStage 4 (foreachPartition at TwitterStreamingSentiment.java:67) failed in 0.116 s due to Job aborted due to stage failure: Task 0 in stage 4.0 failed 1 times, most recent failure: Lost task 0.0 in stage 4.0 (TID 4, localhost, executor driver): org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+Driver stacktrace:
+17/09/23 10:32:50 INFO DAGScheduler: Job 4 failed: foreachPartition at TwitterStreamingSentiment.java:67, took 0.155186 s
+17/09/23 10:32:50 INFO TaskSetManager: Lost task 1.0 in stage 4.0 (TID 5) on localhost, executor driver: org.apache.kafka.common.config.ConfigException (Missing required configuration &quot;key.serializer&quot; which has no default value.) [duplicate 1]
+17/09/23 10:32:50 INFO TaskSchedulerImpl: Removed TaskSet 4.0, whose tasks have all completed, from pool 
+17/09/23 10:32:50 INFO JobScheduler: Finished job streaming job 1506177170000 ms.0 from job set of time 1506177170000 ms
+17/09/23 10:32:50 INFO JobScheduler: Total delay: 0.993 s for time 1506177170000 ms (execution: 0.949 s)
+17/09/23 10:32:50 ERROR JobScheduler: Error running job streaming job 1506177170000 ms.0
+org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 4.0 failed 1 times, most recent failure: Lost task 0.0 in stage 4.0 (TID 4, localhost, executor driver): org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+Driver stacktrace:
+	at org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1435)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1423)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1422)
+	at scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)
+	at scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:48)
+	at org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1422)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:802)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:802)
+	at scala.Option.foreach(Option.scala:257)
+	at org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:802)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1650)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1605)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1594)
+	at org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)
+	at org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:628)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:1918)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:1931)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:1958)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1.apply(RDD.scala:923)
+	at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)
+	at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:112)
+	at org.apache.spark.rdd.RDD.withScope(RDD.scala:362)
+	at org.apache.spark.rdd.RDD.foreachPartition(RDD.scala:923)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$1.apply$mcV$sp(Dataset.scala:2305)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$1.apply(Dataset.scala:2305)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$1.apply(Dataset.scala:2305)
+	at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:57)
+	at org.apache.spark.sql.Dataset.withNewExecutionId(Dataset.scala:2765)
+	at org.apache.spark.sql.Dataset.foreachPartition(Dataset.scala:2304)
+	at org.apache.spark.sql.Dataset.foreachPartition(Dataset.scala:2316)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$analyzeTweets$b1dee145$1(TwitterStreamingSentiment.java:67)
+	at org.apache.spark.streaming.api.java.JavaDStreamLike$$anonfun$foreachRDD$1.apply(JavaDStreamLike.scala:272)
+	at org.apache.spark.streaming.api.java.JavaDStreamLike$$anonfun$foreachRDD$1.apply(JavaDStreamLike.scala:272)
+	at org.apache.spark.streaming.dstream.DStream$$anonfun$foreachRDD$1$$anonfun$apply$mcV$sp$3.apply(DStream.scala:627)
+	at org.apache.spark.streaming.dstream.DStream$$anonfun$foreachRDD$1$$anonfun$apply$mcV$sp$3.apply(DStream.scala:627)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1$$anonfun$apply$mcV$sp$1.apply$mcV$sp(ForEachDStream.scala:51)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1$$anonfun$apply$mcV$sp$1.apply(ForEachDStream.scala:51)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1$$anonfun$apply$mcV$sp$1.apply(ForEachDStream.scala:51)
+	at org.apache.spark.streaming.dstream.DStream.createRDDWithLocalProperties(DStream.scala:415)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1.apply$mcV$sp(ForEachDStream.scala:50)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1.apply(ForEachDStream.scala:50)
+	at org.apache.spark.streaming.dstream.ForEachDStream$$anonfun$1.apply(ForEachDStream.scala:50)
+	at scala.util.Try$.apply(Try.scala:192)
+	at org.apache.spark.streaming.scheduler.Job.run(Job.scala:39)
+	at org.apache.spark.streaming.scheduler.JobScheduler$JobHandler$$anonfun$run$1.apply$mcV$sp(JobScheduler.scala:254)
+	at org.apache.spark.streaming.scheduler.JobScheduler$JobHandler$$anonfun$run$1.apply(JobScheduler.scala:254)
+	at org.apache.spark.streaming.scheduler.JobScheduler$JobHandler$$anonfun$run$1.apply(JobScheduler.scala:254)
+	at scala.util.DynamicVariable.withValue(DynamicVariable.scala:58)
+	at org.apache.spark.streaming.scheduler.JobScheduler$JobHandler.run(JobScheduler.scala:253)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.apache.kafka.common.config.ConfigException: Missing required configuration &quot;key.serializer&quot; which has no default value.
+	at org.apache.kafka.common.config.ConfigDef.parse(ConfigDef.java:124)
+	at org.apache.kafka.common.config.AbstractConfig.&lt;init&gt;(AbstractConfig.java:48)
+	at org.apache.kafka.clients.producer.ProducerConfig.&lt;init&gt;(ProducerConfig.java:235)
+	at org.apache.kafka.clients.producer.KafkaProducer.&lt;init&gt;(KafkaProducer.java:129)
+	at edu.harvard.iq.sparkstreamingml.TwitterStreamingSentiment.lambda$null$b9a999c3$1(TwitterStreamingSentiment.java:70)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.sql.Dataset$$anonfun$foreachPartition$2.apply(Dataset.scala:2316)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.rdd.RDD$$anonfun$foreachPartition$1$$anonfun$apply$29.apply(RDD.scala:925)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1944)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	... 3 more
+</system-err>
+  </testcase>
+</testsuite>

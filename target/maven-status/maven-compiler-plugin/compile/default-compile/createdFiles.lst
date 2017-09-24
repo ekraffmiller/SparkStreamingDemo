@@ -1,0 +1,5 @@
+edu/harvard/iq/sparkstreamingml/CreateNaiveBayesModel.class
+edu/harvard/iq/sparkstreamingml/TwitterStreamingSentiment.class
+edu/harvard/iq/sparkstreamingml/ModelSingleton.class
+edu/harvard/iq/sparkstreamingml/JavaSparkSessionSingleton.class
+edu/harvard/iq/sparkstreamingml/TweetRecord.class
