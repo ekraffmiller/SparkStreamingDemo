@@ -2,11 +2,11 @@
 package edu.harvard.iq.sparkstreamingml;
 
 import java.io.IOException;
-import org.apache.spark.SparkConf;
+import org.apache.spark.ml.Pipeline;
+import org.apache.spark.ml.PipelineModel;
+import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.NaiveBayes;
-import org.apache.spark.ml.classification.NaiveBayesModel;
-import org.apache.spark.ml.feature.CountVectorizer;
-import org.apache.spark.ml.feature.CountVectorizerModel;
+import org.apache.spark.ml.feature.HashingTF;
 import org.apache.spark.ml.feature.StopWordsRemover;
 import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.sql.Dataset;
@@ -25,53 +25,37 @@ import org.apache.spark.sql.SparkSession;
 public class CreateNaiveBayesModel {
 
     public static void main(String args[]) {
-       
-            SparkSession session = SparkSession
+        if (args.length < 2) {
+            System.err.println("Usage: CreateNaiveBayesModel <training path> <model path>");                  
+            System.exit(1);
+        }
+        SparkSession session = SparkSession
                 .builder()
-                .appName("Create NaiveBayes Model")
-                 .master("local[2]")
+                .appName("Create Pipeline Model")
                 .getOrCreate();
-            
+
         String sentiment140Path = "/Users/ellenk/Downloads/trainingandtestdata_2/training.1600000.processed.noemoticon.csv";
-        
+
         Dataset<Row> training = loadSentiment140File(session, sentiment140Path);
-        Dataset<Row> selected = training.select("label","status");
+        Dataset<Row> status = training.select("label", "status");
         
-        
-        // Split the "status" column in to words
         Tokenizer tokenizer = new Tokenizer().setInputCol("status").setOutputCol("words");
-        Dataset<Row> words = tokenizer.transform(selected);
-        words.show();
-         // Remove stop words from the raw list of words
-        StopWordsRemover remover = new StopWordsRemover()
-        .setInputCol("words")
-        .setOutputCol("filtered");       
-        Dataset<Row> filteredData = remover.transform(words);
+        StopWordsRemover stopWordsRemover = new StopWordsRemover().setInputCol(tokenizer.getOutputCol()).setOutputCol("filtered");
+        HashingTF hashingTF = new HashingTF().setNumFeatures(2000).setInputCol(stopWordsRemover.getOutputCol()).setOutputCol("features");
+        NaiveBayes naiveBayes = new NaiveBayes();
         
-           
-        // Create a feature vector from the words
-        CountVectorizerModel cvModel = new CountVectorizer()
-                .setInputCol("filtered")
-                .setOutputCol("features")
-                .setVocabSize(20000)
-                .setMinDF(10)
-                .fit(filteredData);
-        Dataset<Row> rawfeatures = cvModel.transform(filteredData);
-        rawfeatures.show();
-
-     NaiveBayes naiveBayes = new NaiveBayes();
-     NaiveBayesModel model= naiveBayes.fit(rawfeatures);
-     try {
-        model.write().overwrite().save("/Users/ellenk/src/SparkStreamingML/data/naiveBayes");
-     } catch(IOException e) {
-         System.out.println("Exception saving model: " + e.getMessage());
-     }
-        
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] {tokenizer, stopWordsRemover, hashingTF, naiveBayes});
       
+        PipelineModel model = pipeline.fit(status);
+        try {
+            model.write().overwrite().save("/Users/ellenk/src/SparkStreamingML/data/naiveBayes");
+        } catch (IOException e) {
+            System.out.println("Exception saving model: " + e.getMessage());
+        }
 
-      session.stop();
+        session.stop();
     }
-    
+
     /**
     * Loads the Sentiment140 file from the specified path using SparkContext.
     *

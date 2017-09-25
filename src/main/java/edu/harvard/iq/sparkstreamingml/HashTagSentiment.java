@@ -13,6 +13,10 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.ml.PipelineModel;
+import org.apache.spark.ml.classification.NaiveBayesModel;
+import org.apache.spark.ml.feature.HashingTF;
+import org.apache.spark.ml.feature.StopWordsRemover;
+import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -23,38 +27,38 @@ import org.apache.spark.streaming.twitter.TwitterUtils;
 import twitter4j.Status;
 
 /**
- * QUESTION:  do we need to broadcast model?  
+ *  * QUESTION:  do we need to broadcast model?  
  * @author ellenk
  */
-public class TwitterStreamingSentiment {
-    private static String modelPath;
+public class HashTagSentiment {
+ private static String modelPath;
     
     public static void main(String args[]) {
          if (args.length < 5) {
-            System.err.println("Usage: TwitterStreamingSentiment <consumer key>"
+            System.err.println("Usage: HashTagSentiment <consumer key>"
                     + " <consumer secret> <access token> <access token secret> <model path>");
             System.exit(1);
         }
         setTwitterAuth(args);  
         modelPath = args[4];
 
-        analyzeTweets();
+        analyzeHashtagTweets();
     }
 
-    private static void analyzeTweets() {
+    private static void analyzeHashtagTweets() {
          
-        SparkConf sparkConf = new SparkConf().setAppName(" Twitter Sentiment Demo ");
+        SparkConf sparkConf = new SparkConf().setAppName(" Twitter Hashtag Demo ");
         
         JavaStreamingContext streamingContext = new JavaStreamingContext(sparkConf, new Duration(5000L));
         JavaDStream<Status> dStream = TwitterUtils.createStream(streamingContext);
         PipelineModel model = ModelSingleton.getInstance(sparkConf,modelPath);
     
-        String[] filterWords = { "happy","sad", "love", "hate", "good", "bad" };
-        
+        // From the live stream, filter English language tweets
+        // that contain hashtag
         JavaDStream<String> englishTweets = dStream
                 .filter(status -> status.getLang().equals("en"))
                 .map(status -> status.getText())
-                .filter(text -> Arrays.stream(filterWords).anyMatch(text::contains) );
+                .filter(text -> text.contains("#") );
               
         englishTweets.foreachRDD(rdd -> {
                 // we need handle to SparkSession to get Dataframe
@@ -104,11 +108,11 @@ public class TwitterStreamingSentiment {
         System.setProperty("twitter4j.oauth.accessToken", args[2]);
         System.setProperty("twitter4j.oauth.accessTokenSecret", args[3]);
     }
+ 
     
 }
 
 
-
-
+  
   
 
