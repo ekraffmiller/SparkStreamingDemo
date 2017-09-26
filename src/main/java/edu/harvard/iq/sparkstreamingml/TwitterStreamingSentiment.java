@@ -61,8 +61,8 @@ public class TwitterStreamingSentiment {
                 SparkSession sparkSingleton = SparkSessionSingleton.getInstance(rdd.context().getConf());          
 
                 // Convert the RDD to a Dataframe, so we can use the model
-                JavaRDD<TweetRecord> tweetRDD = rdd.map((String s) -> {return new TweetRecord(s);});
-                Dataset<Row> statusDF = sparkSingleton.createDataFrame(tweetRDD, TweetRecord.class);
+                JavaRDD<EnhancedTweetRecord> tweetRDD = rdd.map((String s) -> {return new EnhancedTweetRecord(s);});
+                Dataset<Row> statusDF = sparkSingleton.createDataFrame(tweetRDD, EnhancedTweetRecord.class);
                 
                 // Model transformation adds "predictions" column to our DF
                 Dataset<Row> predictionsDF = model.transform(statusDF);

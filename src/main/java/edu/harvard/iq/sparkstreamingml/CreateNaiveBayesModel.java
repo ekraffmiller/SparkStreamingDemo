@@ -1,7 +1,7 @@
 
 package edu.harvard.iq.sparkstreamingml;
 
-import java.io.IOException;
+
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -49,7 +49,7 @@ public class CreateNaiveBayesModel {
         PipelineModel model = pipeline.fit(status);
         try {
             model.write().overwrite().save("/Users/ellenk/src/SparkStreamingML/data/naiveBayes");
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Exception saving model: " + e.getMessage());
         }
 

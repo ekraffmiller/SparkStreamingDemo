@@ -67,7 +67,8 @@ public class HashTags {
                 
                 // Model transformation adds "predictions" column to our DF
                 Dataset<Row> predictionsDF = model.transform(statusDF);
-                      
+                       
+                
                 // Send results to Kafka
                 predictionsDF.foreachPartition(partition -> {                    
                     Properties props = new Properties();
@@ -79,7 +80,7 @@ public class HashTags {
                               StringWriter sw = new StringWriter();
                               CSVWriter writer = new CSVWriter(sw);
                               writer.writeNext(new String[]{row.getAs("prediction").toString(),row.getAs("status"),row.getAs("createdAt").toString()});
-                              prod.send(new ProducerRecord("hashtagDemo",sw.getBuffer().toString()));
+                              prod.send(new ProducerRecord("trendsDemo",sw.getBuffer().toString()));
                     });
                     prod.close();
                 });
