@@ -14,6 +14,8 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -46,10 +48,12 @@ public class HashTags {
     private static void analyzeHashtagTweets() {
          
         SparkConf sparkConf = new SparkConf().setAppName(" Twitter Hashtag Demo ");
-        
-        JavaStreamingContext streamingContext = new JavaStreamingContext(sparkConf, new Duration(5000L));
+        SparkSession sparkSession = SparkSessionSingleton.getInstance(sparkConf);          
+
+     
+        JavaStreamingContext streamingContext = new JavaStreamingContext(new JavaSparkContext(sparkSession.sparkContext()), new Duration(5000L));
         JavaDStream<Status> dStream = TwitterUtils.createStream(streamingContext);
-        PipelineModel model = ModelSingleton.getInstance(sparkConf,modelPath);
+        PipelineModel model = PipelineModel.load(modelPath);
      
         // From the live stream, filter English language tweets
         // that contain hashtags
@@ -80,7 +84,7 @@ public class HashTags {
                               StringWriter sw = new StringWriter();
                               CSVWriter writer = new CSVWriter(sw);
                               writer.writeNext(new String[]{row.getAs("prediction").toString(),row.getAs("status"),row.getAs("createdAt").toString()});
-                              prod.send(new ProducerRecord("trendsDemo",sw.getBuffer().toString()));
+                              prod.send(new ProducerRecord("trendsDemo3",sw.getBuffer().toString()));
                     });
                     prod.close();
                 });

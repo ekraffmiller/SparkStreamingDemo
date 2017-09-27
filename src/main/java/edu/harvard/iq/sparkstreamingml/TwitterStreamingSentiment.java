@@ -47,7 +47,7 @@ public class TwitterStreamingSentiment {
         
         JavaStreamingContext streamingContext = new JavaStreamingContext(sparkConf, new Duration(5000L));
         JavaDStream<Status> dStream = TwitterUtils.createStream(streamingContext);
-        PipelineModel model = ModelSingleton.getInstance(sparkConf,modelPath);
+        PipelineModel model = PipelineModel.load(modelPath);
     
         String[] filterWords = { "happy","sad", "love", "hate", "good", "bad" };
         
@@ -61,8 +61,8 @@ public class TwitterStreamingSentiment {
                 SparkSession sparkSingleton = SparkSessionSingleton.getInstance(rdd.context().getConf());          
 
                 // Convert the RDD to a Dataframe, so we can use the model
-                JavaRDD<EnhancedTweetRecord> tweetRDD = rdd.map((String s) -> {return new EnhancedTweetRecord(s);});
-                Dataset<Row> statusDF = sparkSingleton.createDataFrame(tweetRDD, EnhancedTweetRecord.class);
+                JavaRDD<TweetRecord> tweetRDD = rdd.map((String s) -> {return new TweetRecord(s);});
+                Dataset<Row> statusDF = sparkSingleton.createDataFrame(tweetRDD, TweetRecord.class);
                 
                 // Model transformation adds "predictions" column to our DF
                 Dataset<Row> predictionsDF = model.transform(statusDF);
