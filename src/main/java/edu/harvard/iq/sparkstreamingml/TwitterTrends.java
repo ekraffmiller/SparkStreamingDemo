@@ -38,7 +38,7 @@ public class TwitterTrends {
                 .readStream()
                 .format("kafka")
                 .option("kafka.bootstrap.servers", "localhost:9092")
-                .option("subscribe", "trendsDemo")
+                .option("subscribe", "trendsDemo2")
                 .option("startingOffsets", "earliest") 
                 .load()
                 .selectExpr("CAST(value AS STRING)")
@@ -63,12 +63,14 @@ public class TwitterTrends {
         Dataset<Row> windowedCounts = hashTags
                 .withWatermark("timestamp", "10 minutes")
                 .groupBy(
-                        functions.window(hashTags.col("timestamp"), "10 minutes", "5 minutes"),
-                        hashTags.col("word")
-                ).count();
+                        // use col(), not hashTags.col()
+                        functions.window(col("timestamp"), "10 minute", "5 minute"),
+                        col("word")
+                )
+           .count();
         
-        Dataset<Row> filtered = windowedCounts.filter(col("count").gt(1));
-
+        Dataset<Row> filtered = windowedCounts.filter(col("count").gt(1)).sort(col("window")).sort(col("count")).select("window.start", "window.end", "word","count");
+       
         // Generate running word count
        // Dataset<Row> wordCounts = lines.flatMap(
        //          
@@ -85,13 +87,13 @@ public class TwitterTrends {
         (similar to Kafka offsets, or Kinesis sequence numbers) to track the read position in the stream. 
         The engine uses checkpointing and write ahead logs to record the offset range of the data being processed in each trigger
         */
-      //  StreamingQuery fileQuery
-      //  = lines.writeStream()
-      //          .format("parquet") // can be "orc", "json", "csv", etc.
-      //          .option("path", "/tmp/demo")
-      //          .option("checkpointLocation", "/tmp/democheckpoint")
-      //          .outputMode("complete")
-      //          .start();
+     //   StreamingQuery query
+     //   = filtered.writeStream()
+     //           .format("csv") // can be "orc", "json", "csv", etc.
+     //           .option("path", "/tmp/demo2")
+     //           .option("checkpointLocation", "/tmp/democheckpoint2")
+    //            .outputMode("append")
+     //           .start();
         try {
             query.awaitTermination();
         } catch (StreamingQueryException e) {
