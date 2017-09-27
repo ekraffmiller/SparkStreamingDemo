@@ -69,7 +69,7 @@ public class TwitterTrends {
                 )
            .count();
         
-        Dataset<Row> filtered = windowedCounts.filter(col("count").gt(1)).sort(col("window")).sort(col("count")).select("window.start", "window.end", "word","count");
+        Dataset<Row> filtered = windowedCounts.filter(col("count").gt(3)).sort(col("window"),col("count").desc()).select("window.start", "window.end", "word","count");
        
         // Generate running word count
        // Dataset<Row> wordCounts = lines.flatMap(
