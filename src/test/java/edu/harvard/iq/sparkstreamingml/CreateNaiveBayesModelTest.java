@@ -23,9 +23,9 @@ public class CreateNaiveBayesModelTest {
         String sentiment140Path = "/Users/ellenk/Downloads/trainingandtestdata_2/training.1600000.processed.noemoticon.csv";
         String modelPath = "/Users/ellenk/src/SparkStreamingML/data/naiveBayes";
        
-        String[] args = {sentiment140Path,modelPath};
+      
     
-        CreateNaiveBayesModel.main(args);
+        CreateNaiveBayesModel.main(new String[] {sentiment140Path,modelPath});
     }
 
    

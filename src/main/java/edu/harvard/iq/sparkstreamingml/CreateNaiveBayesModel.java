@@ -29,12 +29,14 @@ public class CreateNaiveBayesModel {
             System.err.println("Usage: CreateNaiveBayesModel <training path> <model path>");                  
             System.exit(1);
         }
+        String trainingPath = args[0];
+        String modelPath = args[1];
         SparkSession session = SparkSession
                 .builder()
                 .appName("Create Pipeline Model")
                 .getOrCreate();
 
-        String sentiment140Path = "/Users/ellenk/Downloads/trainingandtestdata_2/training.1600000.processed.noemoticon.csv";
+        String sentiment140Path = trainingPath;
 
         Dataset<Row> training = loadSentiment140File(session, sentiment140Path);
         Dataset<Row> status = training.select("label", "status");
@@ -48,7 +50,7 @@ public class CreateNaiveBayesModel {
       
         PipelineModel model = pipeline.fit(status);
         try {
-            model.write().overwrite().save("/Users/ellenk/src/SparkStreamingML/data/naiveBayes");
+            model.write().overwrite().save(modelPath);
         } catch (Exception e) {
             System.out.println("Exception saving model: " + e.getMessage());
         }
