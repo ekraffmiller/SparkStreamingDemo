@@ -63,37 +63,23 @@ public class TwitterTrends {
         Dataset<Row> windowedCounts = hashTags
                 .withWatermark("timestamp", "10 minutes")
                 .groupBy(
-                        // use col(), not hashTags.col()
                         functions.window(col("timestamp"), "10 minute", "5 minute"),
-                        col("word")
+                        col("word")                        
                 )
-           .count();
+                .count();
         
+        // Filter the results to show only rows where count > 3, 
+        // and order by window & count
         Dataset<Row> filtered = windowedCounts.filter(col("count").gt(3)).sort(col("window"),col("count").desc()).select("window.start", "window.end", "word","count");
-       
-        // Generate running word count
-       // Dataset<Row> wordCounts = lines.flatMap(
-       //          
-       //         (FlatMapFunction<String, String>) x -> Arrays.asList(x.split(",")).iterator(),
-       //         Encoders.STRING()).groupBy("value").count();
+    
 
         // Start running the query that prints the running counts to the console
         StreamingQuery query = filtered.writeStream()
                 .outputMode("complete")
                 .format("console")
+                .option("numRows", 100)
                 .start();
-        /*
-        Every streaming source is assumed to have offsets
-        (similar to Kafka offsets, or Kinesis sequence numbers) to track the read position in the stream. 
-        The engine uses checkpointing and write ahead logs to record the offset range of the data being processed in each trigger
-        */
-     //   StreamingQuery query
-     //   = filtered.writeStream()
-     //           .format("csv") // can be "orc", "json", "csv", etc.
-     //           .option("path", "/tmp/demo2")
-     //           .option("checkpointLocation", "/tmp/democheckpoint2")
-    //            .outputMode("append")
-     //           .start();
+   
         try {
             query.awaitTermination();
         } catch (StreamingQueryException e) {
