@@ -8,6 +8,8 @@ package edu.harvard.iq.sparkstreamingml;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
@@ -28,10 +30,13 @@ import scala.Tuple3;
 public class TwitterTrends {
 
     public static void main(String args[]) {
+        // Turn off logging so it's easier to see console output
+        Logger.getLogger("org.apache").setLevel(Level.OFF);
+        
         SparkSession spark = SparkSession
                 .builder()
                 .appName("Twitter Trend Example")
-                .master("local[4]")
+                .master("local[6]")
                 .getOrCreate();
       
     
@@ -73,19 +78,43 @@ public class TwitterTrends {
         // Filter the results to show only rows where count > 3, 
         // and order by window & count
         Dataset<Row> filtered = windowedCounts.filter(col("count").gt(3)).sort(col("window"),col("count").desc()).select("window.start", "window.end", "word","count","avg");
-    
-
+       
+        
         // Start running the query that prints the running counts to the console
         StreamingQuery query = filtered.writeStream()
                 .outputMode("complete")
                 .format("console")
                 .option("numRows", 100)
                 .start();
+        
+               
+        // Get more info about 'Streamy' tweets
+        Dataset<Row> recordsDF = records.toDF("createdAt", "prediction","status");
+        recordsDF.createOrReplaceTempView("records");
    
+        Dataset<Row> filteredDF = spark.sql("select * from records where status LIKE('%Streamy%')");
+
+         // Streamy tweets query
+        StreamingQuery query2 = filteredDF.writeStream()
+                .outputMode("append")
+                .format("console")
+                .option("numRows", 100)
+                .option("truncate", "FALSE")
+                .start();
+   
+        try {
+            query2.awaitTermination();
+        } catch (StreamingQueryException e) {
+            System.out.println(e);
+        }
+         
         try {
             query.awaitTermination();
         } catch (StreamingQueryException e) {
             System.out.println(e);
         }
+        
+
+        
     }
 }
