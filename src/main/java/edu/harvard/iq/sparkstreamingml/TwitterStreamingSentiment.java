@@ -23,13 +23,13 @@ import org.apache.spark.streaming.twitter.TwitterUtils;
 import twitter4j.Status;
 
 /**
- * QUESTION:  do we need to broadcast model?  
+ * Use a previously created NaiveBayesModel to analyze a live stream of tweets
  * @author ellenk
  */
 public class TwitterStreamingSentiment {
     private static String modelPath;
     
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
          if (args.length < 5) {
             System.err.println("Usage: TwitterStreamingSentiment <consumer key>"
                     + " <consumer secret> <access token> <access token secret> <model path>");
@@ -41,16 +41,17 @@ public class TwitterStreamingSentiment {
         analyzeTweets();
     }
 
-    private static void analyzeTweets() {
+    private static void analyzeTweets() throws InterruptedException {
          
-        SparkConf sparkConf = new SparkConf().setAppName(" Twitter Sentiment Demo ");
-        
+        SparkConf sparkConf = new SparkConf().setAppName(" Twitter Sentiment Demo ");       
         JavaStreamingContext streamingContext = new JavaStreamingContext(sparkConf, new Duration(5000L));
         JavaDStream<Status> dStream = TwitterUtils.createStream(streamingContext);
+        
         PipelineModel model = PipelineModel.load(modelPath);
     
         String[] filterWords = { "happy","sad", "love", "hate", "good", "bad" };
         
+        // Get English language tweets that contain any filterWord
         JavaDStream<String> englishTweets = dStream
                 .filter(status -> status.getLang().equals("en"))
                 .map(status -> status.getText())
@@ -82,21 +83,14 @@ public class TwitterStreamingSentiment {
              
             });
 
-        streamingContext.start();
-        try {
-            streamingContext.awaitTermination();
-        } catch (InterruptedException e) {
-            System.out.println("Stream Interrupted");
-        }
+        streamingContext.start();      
+        streamingContext.awaitTermination();
+      
 
     }
 
-
-
     
     private static void setTwitterAuth(String args[]) { 
-    
-
         // Set the system properties so that Twitter4j library used by Twitter stream
         // can use them to generate OAuth credentials
         System.setProperty("twitter4j.oauth.consumerKey", args[0]);

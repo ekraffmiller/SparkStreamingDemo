@@ -33,7 +33,7 @@ import twitter4j.Status;
 public class HashTags {
  private static String modelPath;
     
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
          if (args.length < 5) {
             System.err.println("Usage: HashTagSentiment <consumer key>"
                     + " <consumer secret> <access token> <access token secret> <model path>");
@@ -45,7 +45,7 @@ public class HashTags {
         analyzeHashtagTweets();
     }
 
-    private static void analyzeHashtagTweets() {
+    private static void analyzeHashtagTweets() throws InterruptedException {
          
         SparkConf sparkConf = new SparkConf().setAppName(" Twitter Hashtag Demo ");
         SparkSession sparkSession = SparkSessionSingleton.getInstance(sparkConf);          
@@ -79,24 +79,21 @@ public class HashTags {
                     props.put("bootstrap.servers", "localhost:9092");
                     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
                     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
-                    KafkaProducer prod = new KafkaProducer(props);
-                    partition.forEachRemaining(row -> {
-                              StringWriter sw = new StringWriter();
-                              CSVWriter writer = new CSVWriter(sw);
-                              writer.writeNext(new String[]{row.getAs("prediction").toString(),row.getAs("status"),row.getAs("createdAt").toString()});
-                              prod.send(new ProducerRecord("trendsDemo3",sw.getBuffer().toString()));
-                    });
-                    prod.close();
+                    try (KafkaProducer prod = new KafkaProducer(props)) {
+                        partition.forEachRemaining(row -> {
+                            StringWriter sw = new StringWriter();
+                            CSVWriter writer = new CSVWriter(sw);
+                            writer.writeNext(new String[]{row.getAs("prediction").toString(),row.getAs("status"),row.getAs("createdAt").toString()});
+                            prod.send(new ProducerRecord("trendsDemo3",sw.getBuffer().toString()));
+                        });
+                    }
                 });
              
             });
 
         streamingContext.start();
-        try {
-            streamingContext.awaitTermination();
-        } catch (InterruptedException e) {
-            System.out.println("Stream Interrupted");
-        }
+        streamingContext.awaitTermination();
+       
 
     }
 

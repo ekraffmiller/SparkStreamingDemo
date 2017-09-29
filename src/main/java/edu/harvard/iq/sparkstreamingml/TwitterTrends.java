@@ -29,7 +29,7 @@ import scala.Tuple3;
  */
 public class TwitterTrends {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws StreamingQueryException {
         // Turn off logging so it's easier to see console output
         Logger.getLogger("org.apache").setLevel(Level.OFF);
         
@@ -102,17 +102,11 @@ public class TwitterTrends {
                 .option("truncate", "FALSE")
                 .start();
    
-        try {
+      
             query2.awaitTermination();
-        } catch (StreamingQueryException e) {
-            System.out.println(e);
-        }
-         
-        try {
+          
             query.awaitTermination();
-        } catch (StreamingQueryException e) {
-            System.out.println(e);
-        }
+       
         
 
         

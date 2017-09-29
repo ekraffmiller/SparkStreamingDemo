@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.harvard.iq.sparkstreamingml;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -29,7 +24,7 @@ public class EnhancedTweetRecord implements java.io.Serializable {
             status = vals[1];
             createdAt = Timestamp.valueOf(vals[2]);
         } catch (IOException e) {
-            System.out.println("could not read as csv string: "+ csvLine);
+            System.out.println("could not read as csv string: " + e.getMessage()+ csvLine);
         }
     }
 

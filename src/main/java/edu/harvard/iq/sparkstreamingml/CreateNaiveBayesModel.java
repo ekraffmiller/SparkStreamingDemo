@@ -2,6 +2,7 @@
 package edu.harvard.iq.sparkstreamingml;
 
 
+import java.io.IOException;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -24,7 +25,7 @@ import org.apache.spark.sql.SparkSession;
 */
 public class CreateNaiveBayesModel {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         if (args.length < 2) {
             System.err.println("Usage: CreateNaiveBayesModel <training path> <model path>");                  
             System.exit(1);
@@ -49,11 +50,9 @@ public class CreateNaiveBayesModel {
         Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] {tokenizer, stopWordsRemover, hashingTF, naiveBayes});
       
         PipelineModel model = pipeline.fit(status);
-        try {
-            model.write().overwrite().save(modelPath);
-        } catch (Exception e) {
-            System.out.println("Exception saving model: " + e.getMessage());
-        }
+       
+        model.write().overwrite().save(modelPath);
+       
 
         session.stop();
     }
