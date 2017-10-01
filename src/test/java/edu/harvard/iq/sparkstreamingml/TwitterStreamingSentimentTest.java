@@ -16,9 +16,10 @@ public class TwitterStreamingSentimentTest {
 
     /**
      * Test of main method, of class TwitterStreamingSentiment.
+     * @throws java.lang.InterruptedException
      */
     @org.junit.Test
-    public void testMain() {
+    public void testMain() throws InterruptedException {
         System.setProperty("spark.master","local[2]");   
        
         String consumerKey = "FrJYpexihWGIS9eeTyOlWGVvn";

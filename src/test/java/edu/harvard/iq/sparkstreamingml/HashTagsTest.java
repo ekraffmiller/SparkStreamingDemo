@@ -16,9 +16,10 @@ public class HashTagsTest {
 
     /**
      * Test of main method, of class TwitterStreamingSentiment.
+     * @throws java.lang.InterruptedException
      */
     @org.junit.Test
-    public void testMain() {
+    public void testMain() throws InterruptedException {
          
         String consumerKey = "FrJYpexihWGIS9eeTyOlWGVvn";
         String consumerSecret = "y4bgXB1wjInhwk5dDfUBaRKx4G05m7SdqIH2mLqbhAQMiyFaMV";
@@ -28,8 +29,9 @@ public class HashTagsTest {
         String modelPath = "/Users/ellenk/src/SparkStreamingML/data/naiveBayes";
        
         String[] args = {consumerKey,consumerSecret,accessToken,accessSecret,modelPath};
-    
+        
         HashTags.main(args);
+        
     }
 
    

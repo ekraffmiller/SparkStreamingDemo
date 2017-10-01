@@ -5,6 +5,8 @@
  */
 package edu.harvard.iq.sparkstreamingml;
 
+import java.io.IOException;
+
 /**
  *
  * @author ellenk
@@ -18,7 +20,7 @@ public class CreateNaiveBayesModelTest {
      * Test of main method, of class CreateNaiveBayesModel.
      */
     @org.junit.Test
-    public void testMain() {
+    public void testMain() throws IOException{
         System.setProperty("spark.master", "local[4]"); 
         String sentiment140Path = "/Users/ellenk/Downloads/trainingandtestdata_2/training.1600000.processed.noemoticon.csv";
         String modelPath = "/Users/ellenk/src/SparkStreamingML/data/naiveBayes";
