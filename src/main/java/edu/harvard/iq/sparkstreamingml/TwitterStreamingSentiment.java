@@ -5,7 +5,9 @@
  */
 package edu.harvard.iq.sparkstreamingml;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -16,6 +18,9 @@ import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
@@ -61,11 +66,11 @@ public class TwitterStreamingSentiment {
               
         englishTweets.foreachRDD(rdd -> {
                 // we need handle to SparkSession to get Dataframe
-                SparkSession sparkSingleton = SparkSessionSingleton.getInstance(rdd.context().getConf());          
+                SparkSession sparkSession = SparkSessionSingleton.getInstance(rdd.context().getConf());          
 
                 // Convert the RDD to a Dataframe, so we can use the model
                 JavaRDD<TweetRecord> tweetRDD = rdd.map((String s) -> {return new TweetRecord(s);});
-                Dataset<Row> statusDF = sparkSingleton.createDataFrame(tweetRDD, TweetRecord.class);
+                Dataset<Row> statusDF = sparkSession.createDataFrame(tweetRDD, TweetRecord.class);
                 
                 // Model transformation adds "predictions" column to our DF
                 Dataset<Row> predictionsDF = model.transform(statusDF);
