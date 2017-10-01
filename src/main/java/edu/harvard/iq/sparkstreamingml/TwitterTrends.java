@@ -64,20 +64,21 @@ public class TwitterTrends {
           return result.iterator();
         },
         Encoders.tuple(Encoders.STRING(), Encoders.DOUBLE(),Encoders.TIMESTAMP())
-      ).toDF("word", "prediction","timestamp");
+      ).toDF("hashtag", "prediction","timestamp");
         
-        // Group the data by window and word and compute the count of each group
+        // Group the data by window and word, and compute the count of each group
+        // and the average prediction
         Dataset<Row> windowedCounts = hashTags
                 .withWatermark("timestamp", "10 minutes")
                 .groupBy(
                         functions.window(col("timestamp"), "10 minute", "5 minute"),
-                        col("word")
-                ).agg(count(col("word")).alias("count"),
+                        col("hashtag")
+                ).agg(count(col("hashtag")).alias("count"),
                       avg(col("prediction")).alias("avg"));
         
         // Filter the results to show only rows where count > 3, 
         // and order by window & count
-        Dataset<Row> filtered = windowedCounts.filter(col("count").gt(3)).sort(col("window"),col("count").desc()).select("window.start", "window.end", "word","count","avg");
+        Dataset<Row> filtered = windowedCounts.filter(col("count").gt(3)).sort(col("window"),col("count").desc()).select("window.start", "window.end", "hashtag","count","avg");
        
         
         // Start running the query that prints the running counts to the console

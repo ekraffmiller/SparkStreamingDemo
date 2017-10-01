@@ -15,14 +15,16 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 /**
- *
+ * Create model for Sentiment Analysis using a training dataset of 1.6 million
+ * tweets.
+ * Source of training data-
+ * http://help.sentiment140.com/for-students
+ * Paper describing how training data was gathered and analyzed:
+ * http://cs.stanford.edu/people/alecmgo/papers/TwitterDistantSupervision09.pdf
  * @author ellenk
  */
-/*
 
-/Applications/spark-2.1.0-bin-hadoop2.7/bin/spark-submit --class edu.harvard.iq.sparkstreamingml.CreateNaiveBayesModel --master spark://Ellens-MacBook-Pro-2.local:7077   --verbose  /Users/ellenk/src/SparkStreamingML/target/SparkStreamingML-1.0-SNAPSHOT.jar 
 
-*/
 public class CreateNaiveBayesModel {
 
     public static void main(String args[]) throws IOException {

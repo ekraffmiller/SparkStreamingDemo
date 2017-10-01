@@ -23,7 +23,9 @@ import org.apache.spark.streaming.twitter.TwitterUtils;
 import twitter4j.Status;
 
 /**
+ * Sentiment Analysis of Live Twitter Stream
  * Use a previously created NaiveBayesModel to analyze a live stream of tweets
+ * using basic Spark Streaming API (DStreams)
  * @author ellenk
  */
 public class TwitterStreamingSentiment {

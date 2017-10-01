@@ -27,7 +27,8 @@ import org.apache.spark.streaming.twitter.TwitterUtils;
 import twitter4j.Status;
 
 /**
- *  * QUESTION:  do we need to broadcast model?  
+ *  Read from live twitter stream, apply the sentiment analysis,
+ *  and send result to kafka topic
  * @author ellenk
  */
 public class HashTags {
@@ -83,6 +84,7 @@ public class HashTags {
                         partition.forEachRemaining(row -> {
                             StringWriter sw = new StringWriter();
                             CSVWriter writer = new CSVWriter(sw);
+                            System.out.println(row.toString());
                             writer.writeNext(new String[]{row.getAs("prediction").toString(),row.getAs("status"),row.getAs("createdAt").toString()});
                             prod.send(new ProducerRecord("trendsDemo3",sw.getBuffer().toString()));
                         });
