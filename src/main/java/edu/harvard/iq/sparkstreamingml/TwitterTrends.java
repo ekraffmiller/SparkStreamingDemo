@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package edu.harvard.iq.sparkstreamingml;
 
 import java.sql.Timestamp;
@@ -83,7 +79,7 @@ public class TwitterTrends {
         
         // Start running the query that prints the running counts to the console
         StreamingQuery query = filtered.writeStream()
-                .outputMode("complete")
+                .outputMode("complete")  // complete mode because we are sorting
                 .format("console")
                 .option("numRows", 100)
                 .start();
