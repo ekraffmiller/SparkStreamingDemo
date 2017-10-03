@@ -1,4 +1,3 @@
-
 package edu.harvard.iq.sparkstreamingml;
 
 
@@ -23,8 +22,6 @@ import org.apache.spark.sql.SparkSession;
  * http://cs.stanford.edu/people/alecmgo/papers/TwitterDistantSupervision09.pdf
  * @author ellenk
  */
-
-
 public class CreateNaiveBayesModel {
 
     public static void main(String args[]) throws IOException {
@@ -42,7 +39,6 @@ public class CreateNaiveBayesModel {
         String sentiment140Path = trainingPath;
 
         Dataset<Row> training = loadSentiment140File(session, sentiment140Path);
-        Dataset<Row> status = training.select("label", "status");
         
         Tokenizer tokenizer = new Tokenizer().setInputCol("status").setOutputCol("words");
         StopWordsRemover stopWordsRemover = new StopWordsRemover().setInputCol(tokenizer.getOutputCol()).setOutputCol("filtered");
@@ -51,7 +47,7 @@ public class CreateNaiveBayesModel {
         
         Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] {tokenizer, stopWordsRemover, hashingTF, naiveBayes});
       
-        PipelineModel model = pipeline.fit(status);
+        PipelineModel model = pipeline.fit(training);
        
         model.write().overwrite().save(modelPath);
        
@@ -76,6 +72,6 @@ public class CreateNaiveBayesModel {
       .toDF("label", "id", "date", "query", "user", "status");
 
     // Drop the columns we are not interested in.
-    return tweetsDF.drop("id").drop("date").drop("query").drop("user");
+    return tweetsDF.select("label","status");
   }
 }
