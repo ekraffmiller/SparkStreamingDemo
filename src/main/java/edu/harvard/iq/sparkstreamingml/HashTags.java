@@ -36,7 +36,7 @@ public class HashTags {
     
     public static void main(String args[]) throws InterruptedException {
          if (args.length < 5) {
-            System.err.println("Usage: HashTagSentiment <consumer key>"
+            System.err.println("Usage: HashTags <consumer key>"
                     + " <consumer secret> <access token> <access token secret> <model path>");
             System.exit(1);
         }
