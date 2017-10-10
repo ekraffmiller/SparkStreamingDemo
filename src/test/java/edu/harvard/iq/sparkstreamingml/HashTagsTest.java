@@ -21,10 +21,10 @@ public class HashTagsTest {
     @org.junit.Test
     public void testMain() throws InterruptedException {
          
-        String consumerKey = "FrJYpexihWGIS9eeTyOlWGVvn";
-        String consumerSecret = "y4bgXB1wjInhwk5dDfUBaRKx4G05m7SdqIH2mLqbhAQMiyFaMV";
-        String accessToken = "35462430-8jz6rQdcarZCarELF94LsPaumaytzN9FRNItmEYde";
-        String accessSecret = "Bt6u1CQuzrbX0lHEterUem0dpn3XpyGaAA2NixiwXYFJC";
+        String consumerKey = "mykey";
+        String consumerSecret = "secret";
+        String accessToken = "35462430-token";
+        String accessSecret = "secret";
         System.setProperty("spark.master","local[2]");   
         String modelPath = "/Users/ellenk/src/SparkStreamingML/data/naiveBayes";
        

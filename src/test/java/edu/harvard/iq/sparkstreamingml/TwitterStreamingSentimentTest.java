@@ -22,10 +22,10 @@ public class TwitterStreamingSentimentTest {
     public void testMain() throws InterruptedException {
         System.setProperty("spark.master","local[2]");   
        
-        String consumerKey = "FrJYpexihWGIS9eeTyOlWGVvn";
-        String consumerSecret = "y4bgXB1wjInhwk5dDfUBaRKx4G05m7SdqIH2mLqbhAQMiyFaMV";
-        String accessToken = "35462430-8jz6rQdcarZCarELF94LsPaumaytzN9FRNItmEYde";
-        String accessSecret = "Bt6u1CQuzrbX0lHEterUem0dpn3XpyGaAA2NixiwXYFJC";
+        String consumerKey = "key";
+        String consumerSecret = "secret";
+        String accessToken = "35462430-token";
+        String accessSecret = "secret";
         String modelPath = "/Users/ellenk/src/SparkStreamingML/data/naiveBayes";
        
         String[] args = {consumerKey,consumerSecret,accessToken,accessSecret,modelPath};
