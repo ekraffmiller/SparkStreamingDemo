@@ -72,7 +72,7 @@ public class StemmingExample {
      */
     public static Tuple2<Dataset<Row>,String[]> getDocFeatures(Dataset<Row> docStems) {
             // Group by docIndex to get all the stems for each Abstract back into a list
-        Dataset<Row> grouped = docStems.groupBy(col("docIndex") ).agg(collect_list(col("stem")).alias("stemArray")).sort(col("docIndex"));
+        Dataset<Row> grouped = docStems.groupBy(col("docIndex") ).agg(collect_list(col("stem")).alias("stemArray"));
            
         // fit a CountVectorizerModel from the corpus
         CountVectorizerModel cvModel = new CountVectorizer()
@@ -121,7 +121,6 @@ public class StemmingExample {
         // Group words by stem in order to create the list of unstemmed words 
         // for each stem
         Dataset<Row> ngram = docStems.groupBy(col("stem")).agg(collect_set(col("word")).alias("unstemmed"));
-        ngram.show();
         List vocabList = Arrays.asList(vocabulary);
         // Add index column from vocab[], and word = first unstemmed word in list
         // Now we have everything needed for NGram entity!
@@ -131,9 +130,8 @@ public class StemmingExample {
         Dataset<Row> indexed = ngram.map(row -> {
             long index = vocabList.indexOf(row.getAs("stem"));         
             return RowFactory.create( row.getAs("stem"), row.getAs("unstemmed"),index,((WrappedArray<String>)row.getAs("unstemmed")).head());
-        }, RowEncoder.apply(ngramSchema)).filter(col("index").gt(-1)).sort(col("index")).toDF();
+        }, RowEncoder.apply(ngramSchema)).filter(col("index").gt(-1)).toDF();
         
-        indexed.show(false);
         return indexed; 
         
     }
