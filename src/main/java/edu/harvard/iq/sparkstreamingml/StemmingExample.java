@@ -51,12 +51,45 @@ public class StemmingExample {
                 .appName("Stemming Example")
                 .getOrCreate();
 
-        Dataset<Row> training = loadCSVText(session, csvPath);
-        training.show();
-        // Split up Abstract text into array of words
+        Dataset<Row> docText = loadCSVText(session, csvPath);
+        Tuple2<Dataset<Row>,Dataset<Row>> result = analyzeText(docText);
+        System.out.println("features dataframe: ");
+        result._1.show(); 
+        System.out.println("ngram dataframe: ");
+        result._2.show();
+ 
+        
+        session.stop();
+    }
+    /**
+     * Do stemming, stopword filtering, and create feature vector for text column
+     * @param docTextDF - a Dataframe that must have two columns: 
+     *      text - to be analyzed
+     *      docIndex - to group by after flattening the text to individual words
+     * @return - a Dataframe that contains the following columns:
+     *      docIndex - id of doc within docset
+     *      features - sparse array feature vector
+     */
+    public static Tuple2<Dataset<Row>,String[]> getDocFeatures(Dataset<Row> docStems) {
+            // Group by docIndex to get all the stems for each Abstract back into a list
+        Dataset<Row> grouped = docStems.groupBy(col("docIndex") ).agg(collect_list(col("stem")).alias("stemArray")).sort(col("docIndex"));
+           
+        // fit a CountVectorizerModel from the corpus
+        CountVectorizerModel cvModel = new CountVectorizer()
+        .setInputCol("stemArray")
+        .setOutputCol("features")
+        .setMinDF(2)                
+        .fit(grouped);
+     
+        Dataset<Row> features = cvModel.transform(grouped).select("docIndex","features");
+        return new Tuple2(features, cvModel.vocabulary());
+    }
+    
+    public static Dataset<Row> getDocStems(Dataset<Row> docText) {
+          // Split up Abstract text into array of words
         // Use RegexTokenizer to ignore punctuation
         RegexTokenizer tokenizer = new RegexTokenizer().setPattern("\\W").setInputCol("text").setOutputCol("words");
-        Dataset<Row> tokenized = tokenizer.transform(training);
+        Dataset<Row> tokenized = tokenizer.transform(docText);
         
         // Remove stopWords from array of words (stopWordsRemover will only work on an array, not single string word)
         StopWordsRemover stopWordsRemover = new StopWordsRemover().setStopWords(StopWordsRemover.loadDefaultStopWords("english")).setInputCol("words").setOutputCol("filtered");        
@@ -80,55 +113,50 @@ public class StemmingExample {
         Stemmer stemmer = new Stemmer().setLanguage("english").setInputCol("word").setOutputCol("stem");
         Dataset<Row> stemmed = stemmer.transform(flattened);
         
-        // Group by docIndex to get all the stems for each Abstract back into a list
-        Dataset<Row> grouped = stemmed.groupBy(col("docIndex") ).agg(collect_list(col("stem")).alias("stemArray")).sort(col("docIndex"));
+        return stemmed;
         
-        // fit a CountVectorizerModel from the corpus
-        CountVectorizerModel cvModel = new CountVectorizer()
-        .setInputCol("stemArray")
-        .setOutputCol("feature")
-        .setMinDF(2)                
-        .fit(grouped);
-     
-        Dataset<Row> features = cvModel.transform(grouped);
-        features.show();
-        String[] vocabulary = cvModel.vocabulary();
-        List vocab = Arrays.asList(vocabulary);
-        
+    }
+    public static Dataset<Row> getNGrams(Dataset<Row> docStems, String[] vocabulary) {
+           
         // Group words by stem in order to create the list of unstemmed words 
         // for each stem
-        Dataset<Row> ngram = stemmed.groupBy(col("stem")).agg(collect_set(col("word")).alias("unstemmed"));
+        Dataset<Row> ngram = docStems.groupBy(col("stem")).agg(collect_set(col("word")).alias("unstemmed"));
         ngram.show();
-       
+        List vocabList = Arrays.asList(vocabulary);
         // Add index column from vocab[], and word = first unstemmed word in list
         // Now we have everything needed for NGram entity!
         StructType ngramSchema = ngram.schema();
         ngramSchema = ngramSchema.add("index", DataTypes.LongType);
         ngramSchema = ngramSchema.add("word", DataTypes.StringType);
         Dataset<Row> indexed = ngram.map(row -> {
-            long index = vocab.indexOf(row.getAs("stem"));         
+            long index = vocabList.indexOf(row.getAs("stem"));         
             return RowFactory.create( row.getAs("stem"), row.getAs("unstemmed"),index,((WrappedArray<String>)row.getAs("unstemmed")).head());
         }, RowEncoder.apply(ngramSchema)).filter(col("index").gt(-1)).sort(col("index")).toDF();
         
         indexed.show(false);
-     
+        return indexed; 
         
-        
-        session.stop();
     }
-
+    
+    public static Tuple2<Dataset<Row>,Dataset<Row>> analyzeText(Dataset<Row> docText) {
+       Dataset<Row> docStems = getDocStems(docText);
+       Tuple2<Dataset<Row>,String[]> features = getDocFeatures(docStems);
+       Dataset<Row> ngrams = getNGrams(docStems, features._2);
+       return new Tuple2(features._1,ngrams);
+    }
+    
+    
     /**
      * Loads the Sentiment140 file from the specified path using SparkContext.
      *
      * @param session -- Spark Session.
      * @param csvPath -- Absolute file path of to csv file. (we are assuming
      * it's text column is called "text")
-     * @return -- Spark DataFrame of the Sentiment file with the tweet text and
-     * its polarity.
+     * @return -- Spark DataFrame of the csv file with text and docIndex columns
      */
     public static Dataset<Row> loadCSVText(SparkSession session, String csvPath) {
 
-        Dataset<Row> tweetsDF = session.read()
+        Dataset<Row> docTextDF = session.read()
                 .format("com.databricks.spark.csv")
                 .option("header", "true")
                 .option("inferSchema", "true")
@@ -136,7 +164,7 @@ public class StemmingExample {
                 .toDF();
        
         // some abracts are null, so dont use them.
-        return tweetsDF
+        return docTextDF
                 .filter(row -> row.getAs("text") != null);
     }
 }
