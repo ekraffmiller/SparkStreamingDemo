@@ -52,13 +52,16 @@ public class StemmingExample {
                 .builder()
                 .appName("Stemming Example")
                 .getOrCreate();
-
+        String language = "english";
         Dataset<Row> docText = loadCSVText(session, csvPath);
-        Tuple2<Dataset<Row>,Dataset<Row>> result = analyzeText(docText);
+        Tuple2<Dataset<Row>,Dataset<Row>> result = analyzeText(docText, language);
         System.out.println("features dataframe: ");
         result._1.show(); 
         System.out.println("ngram dataframe: ");
         result._2.show(200);
+        
+      //  System.out.println("bigrams only:");
+      //  result._2.filter(row -> row.getAs("stem").toString().contains(" ")).show();
  
         
         session.stop();
@@ -90,7 +93,7 @@ public class StemmingExample {
         return new Tuple2(features, cvModel.vocabulary());
     }
     
-    public static Dataset<Row> getDocStems(Dataset<Row> docText,String[] stopWords, int ngramSize) {
+    public static Dataset<Row> getDocStems(Dataset<Row> docText,String[] stopWords, String language, int ngramSize) {
           // Split up Abstract text into array of words
         // Use RegexTokenizer to ignore punctuation
         RegexTokenizer tokenizer = new RegexTokenizer().setPattern("\\W").setInputCol("text").setOutputCol("words");
@@ -139,7 +142,7 @@ public class StemmingExample {
         ).toDF("word","docIndex");
 
         // Get the stem for each word (Stemmer will only work on a single word, not on an array of words 
-        Stemmer stemmer = new Stemmer().setLanguage("english").setInputCol("word").setOutputCol("stem");
+        Stemmer stemmer = new Stemmer().setLanguage(language).setInputCol("word").setOutputCol("stem");
         Dataset<Row> stemmed = stemmer.transform(flattened);
         if (ngrams != null) {
             stemmed = stemmed.union(ngrams);
@@ -177,16 +180,16 @@ public class StemmingExample {
         Dataset<Row> indexed = ngram.map(row -> {
             long index = vocabList.indexOf(row.getAs("stem"));         
             return RowFactory.create( row.getAs("stem"), row.getAs("unstemmed"),index,((WrappedArray<String>)row.getAs("unstemmed")).head());
-        }, RowEncoder.apply(ngramSchema)).filter(col("index").gt(-1)).sort(col("index")).toDF();
+        }, RowEncoder.apply(ngramSchema)).filter(col("index").gt(-1)).toDF();
         
         return indexed; 
         
     }
     
-    public static Tuple2<Dataset<Row>, Dataset<Row>> analyzeText(Dataset<Row> docText) {
-        String[] stopWords = StopWordsRemover.loadDefaultStopWords("english");
+    public static Tuple2<Dataset<Row>, Dataset<Row>> analyzeText(Dataset<Row> docText, String language) {
+        String[] stopWords = StopWordsRemover.loadDefaultStopWords(language);
         int ngramSize = 2;
-        Dataset<Row> docStems = getDocStems(docText, stopWords, ngramSize);
+        Dataset<Row> docStems = getDocStems(docText, stopWords, language, ngramSize);
         System.out.println("docStems: ");
         docStems.show(false);
         Tuple2<Dataset<Row>, String[]> features = getDocFeatures(docStems);
