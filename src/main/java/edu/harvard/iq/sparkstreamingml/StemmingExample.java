@@ -55,7 +55,7 @@ public class StemmingExample {
         training.show();
         // Split up Abstract text into array of words
         // Use RegexTokenizer to ignore punctuation
-        RegexTokenizer tokenizer = new RegexTokenizer().setPattern("\\W").setInputCol("Abstract Note").setOutputCol("words");
+        RegexTokenizer tokenizer = new RegexTokenizer().setPattern("\\W").setInputCol("text").setOutputCol("words");
         Dataset<Row> tokenized = tokenizer.transform(training);
         
         // Remove stopWords from array of words (stopWordsRemover will only work on an array, not single string word)
@@ -63,25 +63,25 @@ public class StemmingExample {
         Dataset<Row> filtered = stopWordsRemover.transform(tokenized);
         
         // Flatten the filtered words into a row for each word. 
-        // Need the title column to reduce back to array of words
+        // Need the docIndex column to reduce back to array of words
         Dataset<Row> flattened = filtered.flatMap(row -> {
-            List<Tuple2<String,String>> result = new ArrayList<>();
+            List<Tuple2<String,Integer>> result = new ArrayList<>();
             WrappedArray<String> list = (WrappedArray<String>)row.getAs("filtered");
             scala.collection.Iterator iter = list.iterator();
             while(iter.hasNext()) {
-                result.add(new Tuple2((String)iter.next(), row.getAs("Title")));
+                result.add(new Tuple2((String)iter.next(), row.getAs("docIndex")));
             }           
             return result.iterator();
         },
-        Encoders.tuple(Encoders.STRING(),Encoders.STRING())
-        ).toDF("word","title");
+        Encoders.tuple(Encoders.STRING(),Encoders.INT())
+        ).toDF("word","docIndex");
 
         // Get the stem for each word (Stemmer will only work on a single word, not on an array of words 
         Stemmer stemmer = new Stemmer().setLanguage("english").setInputCol("word").setOutputCol("stem");
         Dataset<Row> stemmed = stemmer.transform(flattened);
         
-        // Group by title to get all the stems for each Abstract back into a list
-        Dataset<Row> grouped = stemmed.groupBy(col("title") ).agg(collect_list(col("stem")).alias("stemArray")).sort(col("title"));
+        // Group by docIndex to get all the stems for each Abstract back into a list
+        Dataset<Row> grouped = stemmed.groupBy(col("docIndex") ).agg(collect_list(col("stem")).alias("stemArray")).sort(col("docIndex"));
         
         // fit a CountVectorizerModel from the corpus
         CountVectorizerModel cvModel = new CountVectorizer()
@@ -122,7 +122,7 @@ public class StemmingExample {
      *
      * @param session -- Spark Session.
      * @param csvPath -- Absolute file path of to csv file. (we are assuming
-     * it's text column is called "abstract note")
+     * it's text column is called "text")
      * @return -- Spark DataFrame of the Sentiment file with the tweet text and
      * its polarity.
      */
@@ -134,8 +134,9 @@ public class StemmingExample {
                 .option("inferSchema", "true")
                 .load(csvPath)
                 .toDF();
-
+       
         // some abracts are null, so dont use them.
-        return tweetsDF.filter(row -> row.getAs("Abstract Note") != null);
+        return tweetsDF
+                .filter(row -> row.getAs("text") != null);
     }
 }
