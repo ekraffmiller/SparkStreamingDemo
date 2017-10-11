@@ -13,22 +13,20 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.ml.feature.CountVectorizer;
 import org.apache.spark.ml.feature.CountVectorizerModel;
+import org.apache.spark.ml.feature.RegexTokenizer;
 import org.apache.spark.ml.feature.StopWordsRemover;
-import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.mllib.feature.Stemmer;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.RowFactory;
-import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder;
 import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.functions.collect_list;
 import static org.apache.spark.sql.functions.collect_set;
-import org.apache.spark.sql.types.ArrayType;
 import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import scala.Tuple2;
 import scala.collection.mutable.WrappedArray;
 
@@ -41,7 +39,7 @@ public class StemmingExample {
 
     public static void main(String args[]) throws IOException {
         // Turn off logging so it's easier to see console output
-        Logger.getLogger("org.apache").setLevel(Level.OFF);
+        Logger.getLogger("org.apache").setLevel(Level.ERROR);
         if (args.length < 1) {
             System.err.println("Usage: StemmingExample <csv path> ");
             System.exit(1);
@@ -56,7 +54,8 @@ public class StemmingExample {
         Dataset<Row> training = loadCSVText(session, csvPath);
         training.show();
         // Split up Abstract text into array of words
-        Tokenizer tokenizer = new Tokenizer().setInputCol("Abstract Note").setOutputCol("words");
+        // Use RegexTokenizer to ignore punctuation
+        RegexTokenizer tokenizer = new RegexTokenizer().setPattern("\\W").setInputCol("Abstract Note").setOutputCol("words");
         Dataset<Row> tokenized = tokenizer.transform(training);
         
         // Remove stopWords from array of words (stopWordsRemover will only work on an array, not single string word)
@@ -88,34 +87,28 @@ public class StemmingExample {
         CountVectorizerModel cvModel = new CountVectorizer()
         .setInputCol("stemArray")
         .setOutputCol("feature")
-        .setVocabSize(1000)
-        .setMinDF(2)
+        .setMinDF(2)                
         .fit(grouped);
      
         Dataset<Row> features = cvModel.transform(grouped);
         features.show();
         String[] vocabulary = cvModel.vocabulary();
         List vocab = Arrays.asList(vocabulary);
-        System.out.println(Arrays.toString(vocabulary));
         
-        // Next things to do - 
-        // > group words by stem
-        // > use vocabulary array and grouped words by stem to create NGram
-        // > save NGram in db!
-        // > improve tokenizer to ignore punctuation
+        // Group words by stem in order to create the list of unstemmed words 
+        // for each stem
         Dataset<Row> ngram = stemmed.groupBy(col("stem")).agg(collect_set(col("word")).alias("unstemmed"));
         ngram.show();
-        List<StructField> fields = new ArrayList<>();
-        fields.add(DataTypes.createStructField("index", DataTypes.LongType, true));
-        fields.add(DataTypes.createStructField("stem", DataTypes.StringType, true));
-        fields.add(DataTypes.createStructField("unstemmed", ArrayType.apply(DataTypes.StringType),true));
-        
-        ExpressionEncoder<Row> encoder = RowEncoder.apply(DataTypes.createStructType(fields));
-        
+       
+        // Add index column from vocab[], and word = first unstemmed word in list
+        // Now we have everything needed for NGram entity!
+        StructType ngramSchema = ngram.schema();
+        ngramSchema = ngramSchema.add("index", DataTypes.LongType);
+        ngramSchema = ngramSchema.add("word", DataTypes.StringType);
         Dataset<Row> indexed = ngram.map(row -> {
-            long index = vocab.indexOf(row.getAs("stem"));
-            return RowFactory.create(index, row.getAs("stem"), row.getAs("unstemmed"));
-        }, encoder).filter(col("index").gt(-1)).sort(col("index")).toDF();
+            long index = vocab.indexOf(row.getAs("stem"));         
+            return RowFactory.create( row.getAs("stem"), row.getAs("unstemmed"),index,((WrappedArray<String>)row.getAs("unstemmed")).head());
+        }, RowEncoder.apply(ngramSchema)).filter(col("index").gt(-1)).sort(col("index")).toDF();
         
         indexed.show(false);
      
