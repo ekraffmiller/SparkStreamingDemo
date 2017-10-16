@@ -53,15 +53,17 @@ public class StemmingExample {
                 .appName("Stemming Example")
                 .getOrCreate();
         String language = "english";
+        boolean bigrams = false;
+        int minDocFrequency = 2;
         Dataset<Row> docText = loadCSVText(session, csvPath);
-        Tuple2<Dataset<Row>,Dataset<Row>> result = analyzeText(docText, language);
+        Tuple2<Dataset<Row>,Dataset<Row>> result = analyzeText(docText, language,bigrams, minDocFrequency);
         System.out.println("features dataframe: ");
         result._1.show(); 
         System.out.println("ngram dataframe: ");
         result._2.show(200);
         
       //  System.out.println("bigrams only:");
-      //  result._2.filter(row -> row.getAs("stem").toString().contains(" ")).show();
+      //  result._2.filtesr(row -> row.getAs("stem").toString().contains(" ")).show();
  
         
         session.stop();
@@ -70,15 +72,17 @@ public class StemmingExample {
      * create feature vectors for stemmed doc text
      * @param docStems - a Dataframe that must have two columns: 
      *      
-     *      docIndex - to group by after flattening the text to individual words
+     *      docIndex - to group by after flattening the text to individual stems
      *      stem - the word stem
+     * @param minDocFrequency - the minimum number of documents the ngram
+     *      has to appear in to be included in the vocabulary
      * @return - Tuple2
      *      1:  Dataset<Row> that contains the following columns:
      *      docIndex - id of doc within docset
      *      features - sparse array feature vector
      *      2: String[] - model vocabulary - needed to create NGrams
      */
-    public static Tuple2<Dataset<Row>,String[]> getDocFeatures(Dataset<Row> docStems ) {
+    public static Tuple2<Dataset<Row>,String[]> getDocFeatures(Dataset<Row> docStems, int minDocFrequency ) {
             // Group by docIndex to get all the stems for each Abstract back into a list
         Dataset<Row> grouped = docStems.groupBy(col("docIndex") ).agg(collect_list(col("stem")).alias("stemArray"));
            
@@ -86,14 +90,26 @@ public class StemmingExample {
         CountVectorizerModel cvModel = new CountVectorizer()
         .setInputCol("stemArray")
         .setOutputCol("features")
-        .setMinDF(2)                
+        .setMinDF(minDocFrequency)                
         .fit(grouped);
      
         Dataset<Row> features = cvModel.transform(grouped).select("docIndex","features");
         return new Tuple2(features, cvModel.vocabulary());
     }
-    
-    public static Dataset<Row> getDocStems(Dataset<Row> docText,String[] stopWords, String language, int ngramSize) {
+    /**
+     * From a Dataset of plain text, return a tranformed set containing word, stem and docIndex
+     * @param docText - dataset with two columns
+     *      text - all the text in the document
+     *      docIndex - an id for this document within the Dataset (0 - (docsetSize-1))
+     * @param stopWords - words to filter our before stemming
+     * @param language - for stemming (different languages have different rules for stemming)
+     * @param bigrams - if true, include bigrams in the feature vector
+     * @return Dataset of stems. Columns:
+     *      word - original word (or two words if bigram)
+     *      stem of the word (or just a copy of the bigram)
+     *      docIndex - identifies the document that the word belongs to
+     */
+    public static Dataset<Row> getDocStems(Dataset<Row> docText,String[] stopWords, String language, boolean bigrams) {
           // Split up Abstract text into array of words
         // Use RegexTokenizer to ignore punctuation
         RegexTokenizer tokenizer = new RegexTokenizer().setPattern("\\W").setInputCol("text").setOutputCol("words");
@@ -103,11 +119,11 @@ public class StemmingExample {
         StopWordsRemover stopWordsRemover = new StopWordsRemover().setStopWords(stopWords).setInputCol("words").setOutputCol("filtered");        
         Dataset<Row> filtered = stopWordsRemover.transform(tokenized);
         Dataset<Row> ngrams = null;
-        if (ngramSize > 1) {
-            // for bigrams and trigrams we are not going to stem, just 
+        if (bigrams) {
+            // for bigrams  we are not going to stem, just 
             // use the phrase as is (assuming this is the best way to find
-            // important bigrams/trigrams)
-            NGram ngramTransformer = new NGram().setN(ngramSize).setInputCol("filtered").setOutputCol("ngrams");
+            // important bigrams)
+            NGram ngramTransformer = new NGram().setN(2).setInputCol("filtered").setOutputCol("ngrams");
             ngrams = ngramTransformer.transform(filtered)
                     .select("ngrams", "docIndex")
                     // flatten list of ngrams to individual ngram per row
@@ -186,13 +202,13 @@ public class StemmingExample {
         
     }
     
-    public static Tuple2<Dataset<Row>, Dataset<Row>> analyzeText(Dataset<Row> docText, String language) {
+    public static Tuple2<Dataset<Row>, Dataset<Row>> analyzeText(Dataset<Row> docText, String language, boolean ngramSize, int minDocFrequency) {
         String[] stopWords = StopWordsRemover.loadDefaultStopWords(language);
-        int ngramSize = 2;
+       
         Dataset<Row> docStems = getDocStems(docText, stopWords, language, ngramSize);
         System.out.println("docStems: ");
         docStems.show(false);
-        Tuple2<Dataset<Row>, String[]> features = getDocFeatures(docStems);
+        Tuple2<Dataset<Row>, String[]> features = getDocFeatures(docStems, minDocFrequency);
         Dataset<Row> ngrams = getNGramEntityValues(docStems, features._2);
         return new Tuple2(features._1, ngrams);
     }
