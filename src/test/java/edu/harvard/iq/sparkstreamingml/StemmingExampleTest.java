@@ -7,6 +7,7 @@ package edu.harvard.iq.sparkstreamingml;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.spark.sql.SparkSession;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 
@@ -75,7 +76,15 @@ public class StemmingExampleTest {
         System.out.println("classifierId = "+ classifierId.toHexString());
         String language = "english";
         boolean bigrams = false;
-        int minDocFrequency = 1;   StemmingExample.processDocuments(mongoHost, mongoDb, mongoUser, mongoPasswd, mongoSetId, classifierId.toHexString(),language, bigrams, minDocFrequency);
+         SparkSession session = SparkSession
+                .builder()
+                .appName("Stemming Example")
+               // .config("spark.mongodb.input.uri", "mongodb://"+mongoUser+":"+mongoPasswd+"@"+mongoHost+"/"+mongoDb+".Document")
+                
+               // .config("spark.mongodb.output.uri", "mongodb://"+mongoUser+":"+mongoPasswd+"@"+mongoHost+"/"+mongoDb+".NGram")
+                .getOrCreate();
+        int minDocFrequency = 1; 
+        StemmingExample.processDocuments(session, mongoHost, mongoDb, mongoUser, mongoPasswd, mongoSetId, classifierId.toHexString(),language, bigrams, minDocFrequency);
     }
 
     /**

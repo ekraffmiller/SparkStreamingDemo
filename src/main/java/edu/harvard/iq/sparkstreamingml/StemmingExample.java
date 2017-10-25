@@ -6,6 +6,7 @@
 package edu.harvard.iq.sparkstreamingml;
 
 import com.mongodb.spark.MongoSpark;
+import com.mongodb.spark.config.ReadConfig;
 import com.mongodb.spark.config.WriteConfig;
 import com.mongodb.spark.sql.helpers.StructFields;
 import java.io.IOException;
@@ -250,24 +251,16 @@ public class StemmingExample {
         
     }
     
-    public static void processDocuments(String mongoHost, String mongoDb, String mongoUser,String mongoPasswd, String mongoSetId, String classifierId, String language, boolean bigrams, int minDocFrequency) {
-
-        SparkSession session = SparkSession
-                .builder()
-                .appName("Stemming Example")
-                .config("spark.mongodb.input.uri", "mongodb://"+mongoUser+":"+mongoPasswd+"@"+mongoHost+"/"+mongoDb+".Document")
-                
-                .config("spark.mongodb.output.uri", "mongodb://"+mongoUser+":"+mongoPasswd+"@"+mongoHost+"/"+mongoDb+".NGram")
-                .getOrCreate();
-        
-    //       Configuration outputConfig = new Configuration();
-    //    outputConfig.set("mongo.output.uri", "mongodb://" + MongoDB.getMongoHost().get(0) + ":27017/" + MongoDB.getDatastore().getDB().getName() + "."+DistanceService.getDistanceCollName(classifierId));
-   
+    public static void processDocuments(SparkSession session, String mongoHost, String mongoDb, String mongoUser,String mongoPasswd, String mongoSetId, String classifierId, String language, boolean bigrams, int minDocFrequency) {
         
         JavaSparkContext context = new JavaSparkContext(session.sparkContext());
-        
+        Map<String,String> configMap = new HashMap<>();
+        configMap.put("spark.mongodb.input.uri", "mongodb://"+mongoUser+":"+mongoPasswd+"@"+mongoHost+"/"+mongoDb+".Document");
+        configMap.put("spark.mongodb.output.uri", "mongodb://"+mongoUser+":"+mongoPasswd+"@"+mongoHost+"/"+mongoDb+".NGram");
+        ReadConfig readConfig = ReadConfig.create(context.getConf(),configMap);
+    
         // Get Document Text from Mongo 
-        Dataset<Row> docCollection = MongoSpark.load(context).toDF().select("docIndex", "text", "mongoSetId");
+        Dataset<Row> docCollection = MongoSpark.load(context,readConfig).toDF().select("docIndex", "text", "mongoSetId");
         StructField[] schemafields = docCollection.schema().fields();
         System.out.println(schemafields[0]);
         docCollection.createOrReplaceTempView("myview");
@@ -294,11 +287,11 @@ public class StemmingExample {
                     new GenericRowWithSchema(new String[] {classifierId}, oidSchema)
             );
         }, RowEncoder.apply(ngramSchema));
-       
+        
         // Note: have to do this filter to avoid a NullPointerException
         // when saving, even though
         // there are no rows in the dataset with classifierId = null!
-        MongoSpark.save(ngramDocs.filter(col("classifierId").isNotNull()));
+        MongoSpark.save(ngramDocs.filter(col("classifierId").isNotNull()),WriteConfig.create(context.getConf(), configMap));
         // System.out.println("number of ngram rows with null classifierId: "+ngramDocs.filter(col("classifierId").isNull()).count());
   
         // Now save Feature vector to WordDocCount collection     
@@ -306,7 +299,7 @@ public class StemmingExample {
        
         Map<String, String> writeOverrides = new HashMap<>();
         writeOverrides.put("collection", "WordDocCount");
-        WriteConfig writeConfig = WriteConfig.create(context).withOptions(writeOverrides);
+        WriteConfig writeConfig = WriteConfig.create(context.getConf(),configMap ).withOptions(writeOverrides);
         
         // Note: have to do this filter to avoid a NullPointerException, even though
         // there are no rows in the dataset with cId = null!
