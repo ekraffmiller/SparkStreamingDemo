@@ -30,7 +30,6 @@ import org.apache.spark.mllib.feature.Stemmer;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.catalyst.encoders.RowEncoder;
-import org.apache.spark.sql.catalyst.expressions.GenericRow;
 import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema;
 import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.functions.collect_list;
@@ -251,17 +250,20 @@ public class StemmingExample {
         
     }
     
-    public static void processDocuments(String mongoSetId, String classifierId) {
+    public static void processDocuments(String mongoHost, String mongoDb, String mongoUser,String mongoPasswd, String mongoSetId, String classifierId, String language, boolean bigrams, int minDocFrequency) {
 
         SparkSession session = SparkSession
                 .builder()
                 .appName("Stemming Example")
-                .config("spark.mongodb.input.uri", "mongodb://127.0.0.1/mydb.Document")
-                .config("spark.mongodb.output.uri", "mongodb://127.0.0.1/mydb.NGram")
+                .config("spark.mongodb.input.uri", "mongodb://"+mongoUser+":"+mongoPasswd+"@"+mongoHost+"/"+mongoDb+".Document")
+                
+                .config("spark.mongodb.output.uri", "mongodb://"+mongoUser+":"+mongoPasswd+"@"+mongoHost+"/"+mongoDb+".NGram")
                 .getOrCreate();
-        String language = "english";
-        boolean bigrams = false;
-        int minDocFrequency = 1;
+        
+    //       Configuration outputConfig = new Configuration();
+    //    outputConfig.set("mongo.output.uri", "mongodb://" + MongoDB.getMongoHost().get(0) + ":27017/" + MongoDB.getDatastore().getDB().getName() + "."+DistanceService.getDistanceCollName(classifierId));
+   
+        
         JavaSparkContext context = new JavaSparkContext(session.sparkContext());
         
         // Get Document Text from Mongo 
@@ -302,7 +304,7 @@ public class StemmingExample {
         // Now save Feature vector to WordDocCount collection     
         Dataset<Row> features = result._1;
        
-        Map<String, String> writeOverrides = new HashMap<String, String>();
+        Map<String, String> writeOverrides = new HashMap<>();
         writeOverrides.put("collection", "WordDocCount");
         WriteConfig writeConfig = WriteConfig.create(context).withOptions(writeOverrides);
         

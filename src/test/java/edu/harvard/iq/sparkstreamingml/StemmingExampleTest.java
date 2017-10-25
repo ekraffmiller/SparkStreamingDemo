@@ -66,10 +66,16 @@ public class StemmingExampleTest {
     public void testProcessDocuments() {
        System.setProperty("spark.master","local[2]");   
      //  String mongoSetId = "59666ccd1d87fa8329cc547c";
-       String mongoSetId= "59ea3bfe8cbe9713fa9fbe72";
+       String mongoSetId= "59f0d4698cbe9771d5c72c17";
        ObjectId classifierId = new ObjectId();
-       System.out.println("classifierId = "+ classifierId.toHexString());
-       StemmingExample.processDocuments(mongoSetId, classifierId.toHexString());
+       String mongoHost = "127.0.0.1";
+       String mongoUser = "bernie";
+       String mongoPasswd = "vermont";
+       String mongoDb = "mydb";
+        System.out.println("classifierId = "+ classifierId.toHexString());
+        String language = "english";
+        boolean bigrams = false;
+        int minDocFrequency = 1;   StemmingExample.processDocuments(mongoHost, mongoDb, mongoUser, mongoPasswd, mongoSetId, classifierId.toHexString(),language, bigrams, minDocFrequency);
     }
 
     /**
