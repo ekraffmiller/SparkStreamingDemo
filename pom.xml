@@ -146,6 +146,22 @@
             <artifactId>mongo-spark-connector_2.11</artifactId>
             <version>2.2.0</version>
         </dependency>
-    
+   <dependency>
+  <groupId>com.johnsnowlabs.nlp</groupId>
+  <artifactId>spark-nlp_2.11</artifactId>
+  <version>1.2.3</version>
+</dependency> 
+<!-- https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp -->
+<dependency>
+    <groupId>edu.stanford.nlp</groupId>
+    <artifactId>stanford-corenlp</artifactId>
+    <version>3.6.0</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/databricks/spark-corenlp -->
+<dependency>
+    <groupId>databricks</groupId>
+    <artifactId>spark-corenlp</artifactId>
+    <version>0.2.0-s_2.11</version>
+</dependency>
     </dependencies>
 </project>

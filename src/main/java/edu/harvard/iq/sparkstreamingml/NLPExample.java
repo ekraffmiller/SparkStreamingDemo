@@ -7,6 +7,7 @@ package edu.harvard.iq.sparkstreamingml;
 
 import com.johnsnowlabs.nlp.DocumentAssembler;
 import com.johnsnowlabs.nlp.annotators.RegexTokenizer;
+import com.johnsnowlabs.nlp.annotators.ner.crf.NerCrfApproach;
 import com.johnsnowlabs.nlp.annotators.ner.regex.NERRegexApproach;
 import com.johnsnowlabs.nlp.annotators.ner.regex.NERRegexApproach$;
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach;
@@ -16,7 +17,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineStage;
-import org.apache.spark.ml.feature.StopWordsRemover;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -29,7 +29,7 @@ import static org.apache.spark.sql.functions.col;
 public class NLPExample {
 
     public static void main(String args[]) throws IOException {
-        String nerCorpusPath = "/Users/ellenk/src/spark-nlp/src/main/resources/ner-corpus/dict.txt";
+        String nerCorpustest = "/Users/ellenk/src/spark-nlp/src/test/resources/ner-corpus/dict.txt";
         String posCorpusPath = "/Users/ellenk/src/spark-nlp/src/main/resources/anc-pos-corpus";
         // Turn off logging so it's easier to see console output
         Logger.getLogger("org.apache").setLevel(Level.ERROR);
@@ -58,12 +58,28 @@ public class NLPExample {
       //  val sentenceDetector = new SentenceDetectorModel()
   //.setInputCols("document")
  // .setOutputCol("sentence")
+ /*
  
+ Notes for monday:
+ Trying to add StopWords to Pipeline so the NER works better (stop assignning PER to stop words like "will".
+ 
+ Tokenizer doesnt work as an input to stopwords because stopwords filter requires String input rather than Struct that is output by regex
+ (See schema in comment below.)
+ 
+ Also, the NER transformer requires sentence input, not tokens, so using the stop words filter would not fix the problem!
+ 
+ Maybe better to either A) remove stop word like entries from dict.txt
+ B) do filtering after processing, to remove entities that match stop words.
+ 
+ Probably the former?
+ 
+ 
+ */
         
 RegexTokenizer regexTokenizer = new RegexTokenizer();
 regexTokenizer.setOutputCol("token");
 regexTokenizer.setInputCols(new String[]{"sentence"});
-StopWordsRemover stopWordsRemover = new StopWordsRemover().setStopWords(StopWordsRemover.loadDefaultStopWords("english")).setInputCol("unfilteredtoken").setOutputCol("token");        
+//StopWordsRemover stopWordsRemover = new StopWordsRemover().setStopWords(StopWordsRemover.loadDefaultStopWords("english")).setInputCol("unfilteredtoken").setOutputCol("token");        
 
     
 
@@ -72,8 +88,7 @@ StopWordsRemover stopWordsRemover = new StopWordsRemover().setStopWords(StopWord
             documentAssembler,
             sentenceDetector,
             regexTokenizer
-          //              ,
-         //   stopWordsRemover
+                       
         });
 
         Dataset<Row> output = pipeline
@@ -85,23 +100,20 @@ StopWordsRemover stopWordsRemover = new StopWordsRemover().setStopWords(StopWord
         output.select("token").show(1,false);
         System.out.println(output.schema());
 
+        String nerCorpusdict = "/Users/ellenk/src/spark-nlp/src/main/resources/ner-corpus/dict.txt";
         
         NERRegexApproach nerTagger = new NERRegexApproach(); 
-        NERRegexApproach$.MODULE$.train(nerCorpusPath);
+        NERRegexApproach$.MODULE$.train(nerCorpusdict);
        
         nerTagger.setInputCols(new String[] {"sentence"});
         nerTagger.setOutputCol("ner");
-        nerTagger.setCorpusPath(nerCorpusPath);
+        nerTagger.setCorpusPath(nerCorpusdict);
        
         Dataset<Row> nerTags = nerTagger.fit(sentenceDetector.transform(output)).transform(output);
-        nerTags.select("ner").show(false);
+        nerTags.select("ner","sentence").show(false);
         
                 
-        
-     // NerCrfApproach nerCrfTagger = new NerCrfApproach();      
-    //    nerCrfTagger.setInputCols(new String[] {"sentence"});
-     //   nerCrfTagger.setOutputCol("ner");
-       //   nerTags.select("ner").show(false);
+  
       
      
         
@@ -115,7 +127,19 @@ StopWordsRemover stopWordsRemover = new StopWordsRemover().setStopWords(StopWord
         .transform(output);
       //  posTags.select("pos").show(false);
         
-        
+           
+    
+       NerCrfApproach model = new NerCrfApproach();
+       model.setInputCols(new String[]{"document", "token", "pos"});
+    //    model.setLabelColumn("label");
+        model.setMinEpochs(1);
+        model.setMaxEpochs(3);
+      //  model.setDatsetPath("src/test/resources/ner-corpus/test_ner_dataset.txt");
+        model.setC0(34);
+        model.setL2(3.0);
+        model.setOutputCol("ner");
+    //    Dataset<Row> nerTags = model.fit(posTags).transform(posTags);
+     //   nerTags.select("ner").show(false);   
       
         //  System.out.println("bigrams only:");
         //  documents._2.filtesr(row -> row.getAs("stem").toString().contains(" ")).show();
