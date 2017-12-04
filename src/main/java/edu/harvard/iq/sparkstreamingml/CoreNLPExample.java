@@ -20,12 +20,17 @@ import java.util.List;
 import java.util.Properties;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.ml.feature.StopWordsRemover;
+import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.catalyst.encoders.RowEncoder;
+import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.count;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 import scala.Tuple2;
+import scala.Tuple3;
 
 /**
  *
@@ -93,40 +98,36 @@ public class CoreNLPExample {
         props.setProperty("pos.model", "/Users/ellenk/Downloads/stanford-corenlp-models-current/edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
         props.setProperty("ner.model", "/Users/ellenk/Downloads/stanford-corenlp-models-current/edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
 
-        // TODO, convert the annotated text with a flatMap - 
+        /**
+         * first step - run Annotation Pipeline on the docText dataset,
+         * to get tokens that we use for NER and POS processing
+         */
+        Encoder annEncoder = Encoders.kryo(Annotation.class);      
+        Dataset<Annotation> annotationDF = docText.map(row -> {
+            System.out.println("!!!Annotating: "+ row.getAs("text"));
+            Annotation an = new Annotation((String) row.getAs("text"));
+            LazyInstantiator.getStanfordCoreNLP(props).annotate(an);
+            return an;
+        }, annEncoder);
+
+        
+      // TODO, convert the annotated text with a flatMap - 
         // each row will be: token, POS, NER
         
          
-        /* For POS: (Question - filter stop words first?)
-              1. Do flatMap of sentences to get token and POS 
-                  Output: token, POS 
-              2. Filter out so we only have POS keys that we need for display. 
-                    (Or do we need to group POS keys to more general?)
-              3. Group tokens by value and POS key - for each grouping, record count.
-                  Output:  token, POS, count
-              4. For subset of POS keys - filter tokens with POS key, order by count, return top N tokens
-                  Output: 
-        
+       
+        /*
          For NER:
               1.  Before doing flat map, do processing to aggregate multitoken NERs.
                   Output: NER text, NER key  (for all non-O NERs)
         */
-        
-        
-        Dataset<Annotation> annotationDF = docText.map(row -> {
-            Annotation an = new Annotation((String) row.getAs("text"));
-            LazyInstantiator.getStanfordCoreNLP(props).annotate(an);
+          
 
-            List<CoreMap> sentenceList = an.get(CoreAnnotations.SentencesAnnotation.class);
+        annotationDF.foreach(ann -> {
+                System.out.println("DATASET annotation is : "+ ann.toShorterString());
+                 List<CoreMap> sentenceList = ann.get(CoreAnnotations.SentencesAnnotation.class);
             if (sentenceList != null && !sentenceList.isEmpty()) {
                 for (CoreMap sentence : sentenceList) {
-                    /* System.out.println("The keys of the first sentenceList's CoreMap are:");
-                System.out.println(sentence.keySet());
-                System.out.println();
-                System.out.println("The first sentenceList is:");
-                System.out.println(sentence.toShorterString());
-                System.out.println();
-                System.out.println("The first sentenceList tokens are:"); */
                     for (CoreMap token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
                         System.out.println("Value: " + token.get(CoreAnnotations.ValueAnnotation.class) + ", POS: "
                                 + token.get(CoreAnnotations.PartOfSpeechAnnotation.class));
@@ -134,19 +135,75 @@ public class CoreNLPExample {
                     }
                 }
             }
-            return an;
-        }, Encoders.bean(Annotation.class));
+        });
+        /* For POS: (Question - filter stop words first?)
+             -- Do flatMap of sentences to get token and POS 
+                  Output: token, POS
+             -- Filter stop words
+             -- Filter out so we only have POS keys that we need for display. 
+                    (Or do we need to group POS keys to more general?)
+             -- Group tokens by value and POS key - for each grouping, record count.
+                  Output:  token, POS, count
+             -- For subset of POS keys - filter tokens with POS key, order by count, return top N tokens
+                  Output:
+        */
+       
+        Dataset<Row> posWords = annotationDF.flatMap(ann -> {
+            List<Tuple2<String, String>> result = new ArrayList<>();
+            List<CoreMap> sentenceList = ann.get(CoreAnnotations.SentencesAnnotation.class);
+            if (sentenceList != null && !sentenceList.isEmpty()) {
+                for (CoreMap sentence : sentenceList) {
+                    for (CoreMap token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+                        String word = token.get(CoreAnnotations.ValueAnnotation.class);
+                        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+                        result.add(new Tuple2(word, pos));
+                        //  System.out.println("Value: " + token.get(CoreAnnotations.ValueAnnotation.class) + ", POS: "
+                        //        + token.get(CoreAnnotations.PartOfSpeechAnnotation.class));
 
+                    }
+                }
+            }
+            return result.iterator();
+        }, Encoders.tuple(Encoders.STRING(), Encoders.STRING())).toDF("word", "pos");
         
+        StopWordsRemover stopwords = new StopWordsRemover(); 
+        List<String> stopWordList = Arrays.asList(stopwords.getStopWords());
         
-
-        annotationDF.foreach(ann -> LazyInstantiator.getStanfordCoreNLP(props).annotate(ann));
-
-     
+        posWords = posWords.filter(row -> {return !stopWordList.contains((String)row.getAs("word"));}) // filter out stop words
+                .filter(row -> filterUnwantedPOS(row) ) // filter out POS that we don't want to count
+                .map(row -> mapPOS(row), Encoders.tuple(Encoders.STRING(), Encoders.STRING())).toDF("word","pos")
+                .groupBy(col("word"), col("pos")).count();
+                
+        
+        // show top nouns ordered by frequency:
+        posWords.filter(row -> row.getAs("pos").equals("VERB")).sort(col("count").desc())
+               // .sort() // sort by frequency
+                .show(50);
+        
         session.stop();
 
     }
 
+    
+    private static boolean filterUnwantedPOS(Row row) {
+        String pos =(String)row.getAs("pos");
+        return pos.startsWith("V") || pos.startsWith("N") || pos.startsWith("RB") || pos.startsWith("J");
+    }
+    
+    private static Tuple2<String,String> mapPOS( Row row) {
+        String pos =(String)row.getAs("pos");
+        String newPOS = pos;
+        if (pos.startsWith("V")) {
+            newPOS = "VERB";
+        } else if (pos.startsWith("N")) {
+            newPOS = "NOUN";
+        } else if (pos.startsWith("RB")) {
+            newPOS = "ADVERB";
+        } else if (pos.startsWith("J")) {
+            newPOS = "ADJECTIVE";
+        }
+        return new Tuple2(row.getAs("word"),newPOS);
+    }
     /**
      * Loads the csv file from the specified path using SparkContext.
      *
@@ -171,12 +228,16 @@ public class CoreNLPExample {
     
     public static Dataset<Row> loadSimpleSentence(SparkSession session) {
           
-         List<Row> simple = Arrays.asList(RowFactory.create("This is a very simple sentence by Ellen."));
+         List<Row> simple = Arrays.asList(
+                 RowFactory.create("The cold water filled the pond and reflected the gray clouds in the sky."),
+                 RowFactory.create("Donald Trump's tweets that he posted this morning reflected badly on his judgement."),
+                 RowFactory.create("The water from the refrigerator is nice and cold.  I filled my glass."));
          JavaSparkContext jsc = new JavaSparkContext(session.sparkContext());
          JavaRDD<Row> rdd = jsc.parallelize(simple);
           StructType schema = new StructType();
         schema = schema.add("text", DataTypes.StringType);
-     return  session.createDataFrame(rdd.rdd(), schema);
+        Dataset<Row> text = session.createDataFrame(rdd.rdd(), schema);
+     return  text;
       
     }
 
